@@ -33,6 +33,7 @@ const MAX_TOTAL_BYTES = 50 * 1024 * 1024
 const MAX_FILES_FOR_EMBEDDING = 40
 const QUALITY_WINDOW_MS = 24 * 60 * 60 * 1000
 const QUALITY_ACTIVITY_LIMIT = 60
+const PLATFORM_SKILL_LICENSE = 'MIT-0' as const
 
 export type PublishResult = {
   skillId: Id<'skills'>
@@ -268,6 +269,7 @@ export async function publishVersionForUser(
       frontmatter,
       metadata,
       clawdis,
+      license: PLATFORM_SKILL_LICENSE,
     },
     summary,
     embedding,

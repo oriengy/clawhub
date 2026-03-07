@@ -149,3 +149,10 @@ Limits (server-side):
 
 - Each publish creates a new version (semver).
 - Tags are string pointers to a version; `latest` is commonly used.
+
+## License
+
+- All skills published on ClawHub are licensed under `MIT-0`.
+- Anyone may use, modify, and redistribute published skills, including commercially.
+- Attribution is not required.
+- Do not add conflicting license terms in `SKILL.md`; ClawHub does not support per-skill license overrides.

@@ -136,6 +136,8 @@ Stores your API token + cached registry URL.
 
 - Publishes via `POST /api/v1/skills` (multipart).
 - Requires semver: `--version 1.2.3`.
+- Publishing a skill means it is released under `MIT-0` on ClawHub.
+- Published skills are free to use, modify, and redistribute without attribution.
 
 ### `delete <slug>`
 
@@ -158,6 +160,23 @@ Stores your API token + cached registry URL.
 
 - Unhide a skill (owner, moderator, or admin).
 - Alias for `undelete`.
+
+### `transfer`
+
+- Ownership transfer workflow.
+- Subcommands:
+  - `transfer request <slug> <handle> [--message "..."] [--yes]`
+  - `transfer list [--outgoing]`
+  - `transfer accept <slug> [--yes]`
+  - `transfer reject <slug> [--yes]`
+  - `transfer cancel <slug> [--yes]`
+- Endpoints:
+  - `POST /api/v1/skills/{slug}/transfer`
+  - `POST /api/v1/skills/{slug}/transfer/accept`
+  - `POST /api/v1/skills/{slug}/transfer/reject`
+  - `POST /api/v1/skills/{slug}/transfer/cancel`
+  - `GET /api/v1/transfers/incoming`
+  - `GET /api/v1/transfers/outgoing`
 
 ### `ban-user <handleOrId>`
 

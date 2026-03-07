@@ -33,10 +33,18 @@
 - Commit messages: Conventional Commits (`feat:`, `fix:`, `chore:`, `docs:`…).
 - Keep changes scoped; avoid repo-wide search/replace.
 - PRs: include summary + test commands run. Add screenshots for UI changes.
+- GitHub comments: for multiline `gh` comments/close messages, use `--body-file`, `--input`, or stdin/heredoc with real newlines; never pass literal `\\n` in shell strings.
 - Reject PRs that add skills into source code/repo content directly (for example under `skills/` or seed-only additions intended as published skills). Skills must be uploaded/published via CLI.
 
 ## Git Notes
 - If `git branch -d/-D <branch>` is policy-blocked, delete the local ref directly: `git update-ref -d refs/heads/<branch>`.
+
+## URL Quick Reference
+- Canonical site: `https://clawhub.ai` (prefer this over legacy domains).
+- Skill page URL format: `https://clawhub.ai/<owner>/<slug>` (owner handle preferred; falls back to owner id).
+- Skill API detail URL: `https://clawhub.ai/api/v1/skills/<slug>`.
+- Skill file URL: `https://clawhub.ai/api/v1/skills/<slug>/file?path=SKILL.md`.
+- For “full URL?” requests, return the canonical page URL first, then API URL if useful.
 
 ## Configuration & Security
 - Local env: `.env.local` (never commit secrets).

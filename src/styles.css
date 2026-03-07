@@ -710,6 +710,55 @@ code {
     inset 0 1px 0 rgba(255, 214, 198, 0.42);
 }
 
+.upload-license-card {
+  display: grid;
+  gap: 10px;
+  padding: 14px;
+  border-radius: 16px;
+  border: 1px solid rgba(255, 118, 84, 0.2);
+  background: rgba(255, 249, 245, 0.72);
+}
+
+[data-theme="dark"] .upload-license-card {
+  border-color: rgba(255, 131, 95, 0.24);
+  background: rgba(20, 36, 47, 0.76);
+}
+
+.upload-license-pill {
+  width: fit-content;
+  padding: 6px 12px;
+  border-radius: var(--radius-pill);
+  background: rgba(255, 107, 74, 0.16);
+  color: var(--accent-deep);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+[data-theme="dark"] .upload-license-pill {
+  background: rgba(232, 106, 71, 0.24);
+  color: #ffd0bf;
+}
+
+.upload-license-copy {
+  margin: 0;
+  color: var(--ink-soft);
+  line-height: 1.55;
+}
+
+.upload-license-check {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  color: var(--ink);
+  line-height: 1.45;
+}
+
+.upload-license-check input {
+  margin-top: 3px;
+}
+
 .upload-submit-btn:not(:disabled):hover {
   transform: translateY(-1px);
   box-shadow:

@@ -1,4 +1,9 @@
 import { createFileRoute, useNavigate, useSearch } from '@tanstack/react-router'
+import {
+  PLATFORM_SKILL_LICENSE,
+  PLATFORM_SKILL_LICENSE_NAME,
+  PLATFORM_SKILL_LICENSE_SUMMARY,
+} from 'clawhub-schema'
 import { useAction, useMutation, useQuery } from 'convex/react'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import semver from 'semver'
@@ -64,6 +69,7 @@ export function Upload() {
   const [displayName, setDisplayName] = useState('')
   const [version, setVersion] = useState('1.0.0')
   const [tags, setTags] = useState('latest')
+  const [acceptedLicenseTerms, setAcceptedLicenseTerms] = useState(false)
   const [changelog, setChangelog] = useState('')
   const [changelogStatus, setChangelogStatus] = useState<'idle' | 'loading' | 'ready' | 'error'>(
     'idle',
@@ -242,6 +248,9 @@ export function Upload() {
     if (parsedTags.length === 0) {
       issues.push('At least one tag is required.')
     }
+    if (!isSoulMode && !acceptedLicenseTerms) {
+      issues.push('Accept the MIT-0 license terms to publish this skill.')
+    }
     if (files.length === 0) {
       issues.push('Add at least one file.')
     }
@@ -272,8 +281,10 @@ export function Upload() {
     trimmedName,
     version,
     parsedTags.length,
+    acceptedLicenseTerms,
     files,
     hasRequiredFile,
+    isSoulMode,
     totalBytes,
     requiredFileLabel,
     slugCollision,
@@ -307,6 +318,10 @@ export function Upload() {
     }
     if (slugCollision) {
       setError(slugCollision.message)
+      return
+    }
+    if (!isSoulMode && !acceptedLicenseTerms) {
+      setError('Accept the MIT-0 license terms to publish this skill.')
       return
     }
     setError(null)
@@ -353,6 +368,7 @@ export function Upload() {
         displayName: trimmedName,
         version,
         changelog: trimmedChangelog,
+        acceptLicenseTerms: isSoulMode ? undefined : acceptedLicenseTerms,
         tags: parsedTags,
         files: uploaded,
       })
@@ -519,6 +535,31 @@ export function Upload() {
         </div>
 
         <div className="card upload-panel">
+          {!isSoulMode ? (
+            <>
+              <h2 className="upload-panel-title">License</h2>
+              <div className="upload-license-card">
+                <div className="upload-license-pill">
+                  {PLATFORM_SKILL_LICENSE} · {PLATFORM_SKILL_LICENSE_NAME}
+                </div>
+                <p className="upload-license-copy">
+                  All skills published on ClawHub are licensed under {PLATFORM_SKILL_LICENSE}.{' '}
+                  {PLATFORM_SKILL_LICENSE_SUMMARY}
+                </p>
+                <label className="upload-license-check">
+                  <input
+                    type="checkbox"
+                    checked={acceptedLicenseTerms}
+                    onChange={(event) => setAcceptedLicenseTerms(event.target.checked)}
+                  />
+                  <span>
+                    I have the rights to this skill and agree to publish it under{' '}
+                    {PLATFORM_SKILL_LICENSE}.
+                  </span>
+                </label>
+              </div>
+            </>
+          ) : null}
           <label className="form-label" htmlFor="changelog">
             Changelog
           </label>

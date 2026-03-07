@@ -3,6 +3,8 @@ import { defineSchema, defineTable } from 'convex/server'
 import { v } from 'convex/values'
 import { EMBEDDING_DIMENSIONS } from './lib/embeddings'
 
+const PLATFORM_SKILL_LICENSE = 'MIT-0' as const
+
 const users = defineTable({
   name: v.optional(v.string()),
   image: v.optional(v.string()),
@@ -215,6 +217,7 @@ const skillVersions = defineTable({
     metadata: v.optional(v.any()),
     clawdis: v.optional(v.any()),
     moltbot: v.optional(v.any()),
+    license: v.optional(v.literal(PLATFORM_SKILL_LICENSE)),
   }),
   createdBy: v.id('users'),
   createdAt: v.number(),
@@ -584,6 +587,7 @@ const reservedSlugs = defineTable({
 const githubBackupSyncState = defineTable({
   key: v.string(),
   cursor: v.optional(v.string()),
+  pruneCursor: v.optional(v.string()),
   updatedAt: v.number(),
 }).index('by_key', ['key'])
 
@@ -625,6 +629,29 @@ const userSkillRootInstalls = defineTable({
   .index('by_user_skill', ['userId', 'skillId'])
   .index('by_skill', ['skillId'])
 
+const skillOwnershipTransfers = defineTable({
+  skillId: v.id('skills'),
+  fromUserId: v.id('users'),
+  toUserId: v.id('users'),
+  status: v.union(
+    v.literal('pending'),
+    v.literal('accepted'),
+    v.literal('rejected'),
+    v.literal('cancelled'),
+    v.literal('expired'),
+  ),
+  message: v.optional(v.string()),
+  requestedAt: v.number(),
+  respondedAt: v.optional(v.number()),
+  expiresAt: v.number(),
+})
+  .index('by_skill', ['skillId'])
+  .index('by_from_user', ['fromUserId'])
+  .index('by_to_user', ['toUserId'])
+  .index('by_to_user_status', ['toUserId', 'status'])
+  .index('by_from_user_status', ['fromUserId', 'status'])
+  .index('by_skill_status', ['skillId', 'status'])
+
 export default defineSchema({
   ...authTables,
   users,
@@ -660,4 +687,5 @@ export default defineSchema({
   userSyncRoots,
   userSkillInstalls,
   userSkillRootInstalls,
+  skillOwnershipTransfers,
 })

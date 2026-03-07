@@ -78,6 +78,7 @@ export declare const CliPublishRequestSchema: import("arktype/internal/variants/
         sha256: string;
         contentType?: string | undefined;
     }[];
+    acceptLicenseTerms?: boolean | undefined;
     tags?: string[] | undefined;
     source?: {
         kind: "github";
@@ -168,6 +169,7 @@ export declare const ApiV1SkillListResponseSchema: import("arktype/internal/vari
             version: string;
             createdAt: number;
             changelog: string;
+            license?: "MIT-0" | null | undefined;
         } | undefined;
     }[];
     nextCursor: string | null;
@@ -186,6 +188,7 @@ export declare const ApiV1SkillResponseSchema: import("arktype/internal/variants
         version: string;
         createdAt: number;
         changelog: string;
+        license?: "MIT-0" | null | undefined;
     } | null;
     owner: {
         handle: string | null;
@@ -214,6 +217,7 @@ export declare const ApiV1SkillVersionResponseSchema: import("arktype/internal/v
         createdAt: number;
         changelog: string;
         changelogSource?: "user" | "auto" | null | undefined;
+        license?: "MIT-0" | null | undefined;
         files?: unknown;
         security?: {
             status: "clean" | "suspicious" | "malicious" | "pending" | "error";
@@ -242,6 +246,39 @@ export declare const ApiV1PublishResponseSchema: import("arktype/internal/varian
 }, {}>;
 export declare const ApiV1DeleteResponseSchema: import("arktype/internal/variants/object.ts").ObjectType<{
     ok: true;
+}, {}>;
+export declare const ApiV1TransferRequestResponseSchema: import("arktype/internal/variants/object.ts").ObjectType<{
+    ok: true;
+    transferId: string;
+    toUserHandle: string;
+    expiresAt: number;
+}, {}>;
+export declare const ApiV1TransferDecisionResponseSchema: import("arktype/internal/variants/object.ts").ObjectType<{
+    ok: true;
+    skillSlug?: string | undefined;
+}, {}>;
+export declare const ApiV1TransferListResponseSchema: import("arktype/internal/variants/object.ts").ObjectType<{
+    transfers: {
+        _id: string;
+        skill: {
+            _id: string;
+            slug: string;
+            displayName: string;
+        };
+        requestedAt: number;
+        expiresAt: number;
+        fromUser?: {
+            _id: string;
+            handle: string | null;
+            displayName: string | null;
+        } | undefined;
+        toUser?: {
+            _id: string;
+            handle: string | null;
+            displayName: string | null;
+        } | undefined;
+        message?: string | undefined;
+    }[];
 }, {}>;
 export declare const ApiV1SetRoleResponseSchema: import("arktype/internal/variants/object.ts").ObjectType<{
     ok: true;

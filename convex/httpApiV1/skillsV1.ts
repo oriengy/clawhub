@@ -8,8 +8,10 @@ import {
   MAX_RAW_FILE_BYTES,
   getPathSegments,
   json,
+  parseJsonPayload,
   parseMultipartPublish,
   parsePublishBody,
+  requireApiTokenUserOrResponse,
   resolveTagsBatch,
   safeTextFileResponse,
   softDeleteErrorToResponse,
@@ -45,7 +47,10 @@ type ListSkillsResult = {
       version: string
       createdAt: number
       changelog: string
-      parsed?: { clawdis?: { os?: string[]; nix?: { plugin?: boolean; systems?: string[] } } }
+      parsed?: {
+        license?: 'MIT-0'
+        clawdis?: { os?: string[]; nix?: { plugin?: boolean; systems?: string[] } }
+      }
     } | null
   }>
   nextCursor: string | null
@@ -205,6 +210,7 @@ export async function listSkillsV1Handler(ctx: ActionCtx, request: Request) {
           version: item.latestVersion.version,
           createdAt: item.latestVersion.createdAt,
           changelog: item.latestVersion.changelog,
+          license: item.latestVersion.parsed?.license ?? null,
         }
       : null,
     metadata: item.latestVersion?.parsed?.clawdis
@@ -301,6 +307,7 @@ export async function skillsGetRouterV1Handler(ctx: ActionCtx, request: Request)
               version: result.latestVersion.version,
               createdAt: result.latestVersion.createdAt,
               changelog: result.latestVersion.changelog,
+              license: result.latestVersion.parsed?.license ?? null,
             }
           : null,
         metadata: result.latestVersion?.parsed?.clawdis
@@ -410,6 +417,7 @@ export async function skillsGetRouterV1Handler(ctx: ActionCtx, request: Request)
           createdAt: version.createdAt,
           changelog: version.changelog,
           changelogSource: version.changelogSource ?? null,
+          license: version.parsed?.license ?? null,
           files: version.files.map((file: SkillFile) => ({
             path: file.path,
             size: file.size,
@@ -490,12 +498,18 @@ export async function publishSkillV1Handler(ctx: ActionCtx, request: Request) {
     if (contentType.includes('application/json')) {
       const body = await request.json()
       const payload = parsePublishBody(body)
+      if (payload.acceptLicenseTerms !== true) {
+        return text('MIT-0 license terms must be accepted to publish skills', 400, rate.headers)
+      }
       const result = await publishVersionForUser(ctx, userId, payload)
       return json({ ok: true, ...result }, 200, rate.headers)
     }
 
     if (contentType.includes('multipart/form-data')) {
       const payload = await parseMultipartPublish(ctx, request)
+      if (payload.acceptLicenseTerms !== true) {
+        return text('MIT-0 license terms must be accepted to publish skills', 400, rate.headers)
+      }
       const result = await publishVersionForUser(ctx, userId, payload)
       return json({ ok: true, ...result }, 200, rate.headers)
     }
@@ -507,26 +521,156 @@ export async function publishSkillV1Handler(ctx: ActionCtx, request: Request) {
   return text('Unsupported content type', 415, rate.headers)
 }
 
+type TransferDecisionAction = 'accept' | 'reject' | 'cancel'
+
+function transferErrorToResponse(error: unknown, headers: HeadersInit) {
+  const message = error instanceof Error ? error.message : 'Transfer failed'
+  const lower = message.toLowerCase()
+  if (lower.includes('unauthorized')) return text('Unauthorized', 401, headers)
+  if (lower.includes('forbidden')) return text('Forbidden', 403, headers)
+  if (lower.includes('not found')) return text(message, 404, headers)
+  if (lower.includes('required') || lower.includes('invalid') || lower.includes('pending')) {
+    return text(message, 400, headers)
+  }
+  return text(message, 400, headers)
+}
+
+async function resolveTransferContext(
+  ctx: ActionCtx,
+  request: Request,
+  slug: string,
+  headers: HeadersInit,
+): Promise<
+  | { ok: true; userId: Id<'users'>; skill: Doc<'skills'> }
+  | { ok: false; response: Response }
+> {
+  const auth = await requireApiTokenUserOrResponse(ctx, request, headers)
+  if (!auth.ok) return auth
+
+  const skill = await ctx.runQuery(internal.skills.getSkillBySlugInternal, { slug })
+  if (!skill || skill.softDeletedAt) return { ok: false, response: text('Skill not found', 404, headers) }
+
+  return { ok: true, userId: auth.userId, skill }
+}
+
+async function handleTransferRequest(
+  ctx: ActionCtx,
+  request: Request,
+  slug: string,
+  headers: HeadersInit,
+) {
+  const transferContext = await resolveTransferContext(ctx, request, slug, headers)
+  if (!transferContext.ok) return transferContext.response
+
+  const parsed = await parseJsonPayload(request, headers)
+  if (!parsed.ok) return parsed.response
+
+  const toUserHandleRaw =
+    typeof parsed.payload.toUserHandle === 'string' ? parsed.payload.toUserHandle.trim() : ''
+  if (!toUserHandleRaw) return text('toUserHandle required', 400, headers)
+  const message = typeof parsed.payload.message === 'string' ? parsed.payload.message : undefined
+
+  try {
+    const result = await ctx.runMutation(internal.skillTransfers.requestTransferInternal, {
+      actorUserId: transferContext.userId,
+      skillId: transferContext.skill._id,
+      toUserHandle: toUserHandleRaw,
+      message,
+    })
+    return json(result, 200, headers)
+  } catch (error) {
+    return transferErrorToResponse(error, headers)
+  }
+}
+
+async function handleTransferDecision(
+  ctx: ActionCtx,
+  request: Request,
+  slug: string,
+  decision: TransferDecisionAction,
+  headers: HeadersInit,
+) {
+  const transferContext = await resolveTransferContext(ctx, request, slug, headers)
+  if (!transferContext.ok) return transferContext.response
+
+  const pendingTransfer =
+    decision === 'cancel'
+      ? await ctx.runQuery(internal.skillTransfers.getPendingTransferBySkillAndFromUserInternal, {
+          skillId: transferContext.skill._id,
+          fromUserId: transferContext.userId,
+        })
+      : await ctx.runQuery(internal.skillTransfers.getPendingTransferBySkillAndUserInternal, {
+          skillId: transferContext.skill._id,
+          toUserId: transferContext.userId,
+        })
+  if (!pendingTransfer) return text('No pending transfer found', 404, headers)
+
+  const mutation =
+    decision === 'accept'
+      ? internal.skillTransfers.acceptTransferInternal
+      : decision === 'reject'
+        ? internal.skillTransfers.rejectTransferInternal
+        : internal.skillTransfers.cancelTransferInternal
+
+  try {
+    const result = await ctx.runMutation(mutation, {
+      actorUserId: transferContext.userId,
+      transferId: pendingTransfer._id,
+    })
+    return json(result, 200, headers)
+  } catch (error) {
+    return transferErrorToResponse(error, headers)
+  }
+}
+
+async function handleSkillsTransferPost(
+  ctx: ActionCtx,
+  request: Request,
+  segments: string[],
+  headers: HeadersInit,
+) {
+  const slug = segments[0]?.trim().toLowerCase() ?? ''
+  if (!slug) return text('Slug required', 400, headers)
+
+  if (segments.length === 2) {
+    return handleTransferRequest(ctx, request, slug, headers)
+  }
+  if (segments.length === 3) {
+    const decision = segments[2]?.trim().toLowerCase()
+    if (decision === 'accept' || decision === 'reject' || decision === 'cancel') {
+      return handleTransferDecision(ctx, request, slug, decision, headers)
+    }
+  }
+  return text('Not found', 404, headers)
+}
+
 export async function skillsPostRouterV1Handler(ctx: ActionCtx, request: Request) {
   const rate = await applyRateLimit(ctx, request, 'write')
   if (!rate.ok) return rate.response
 
   const segments = getPathSegments(request, '/api/v1/skills/')
-  if (segments.length !== 2 || segments[1] !== 'undelete') {
-    return text('Not found', 404, rate.headers)
+  const action = segments[1] ?? ''
+
+  if (segments.length === 2 && action === 'undelete') {
+    const slug = segments[0]?.trim().toLowerCase() ?? ''
+    try {
+      const { userId } = await requireApiTokenUser(ctx, request)
+      await ctx.runMutation(internal.skills.setSkillSoftDeletedInternal, {
+        userId,
+        slug,
+        deleted: false,
+      })
+      return json({ ok: true }, 200, rate.headers)
+    } catch (error) {
+      return softDeleteErrorToResponse('skill', error, rate.headers)
+    }
   }
-  const slug = segments[0]?.trim().toLowerCase() ?? ''
-  try {
-    const { userId } = await requireApiTokenUser(ctx, request)
-    await ctx.runMutation(internal.skills.setSkillSoftDeletedInternal, {
-      userId,
-      slug,
-      deleted: false,
-    })
-    return json({ ok: true }, 200, rate.headers)
-  } catch (error) {
-    return softDeleteErrorToResponse('skill', error, rate.headers)
+
+  if (action === 'transfer') {
+    return handleSkillsTransferPost(ctx, request, segments, rate.headers)
   }
+
+  return text('Not found', 404, rate.headers)
 }
 
 export async function skillsDeleteRouterV1Handler(ctx: ActionCtx, request: Request) {

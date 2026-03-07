@@ -812,6 +812,7 @@ describe('httpApiV1 handlers', () => {
       displayName: 'Demo',
       version: '1.0.0',
       changelog: 'c',
+      acceptLicenseTerms: true,
       files: [
         {
           path: 'SKILL.md',
@@ -855,6 +856,7 @@ describe('httpApiV1 handlers', () => {
         displayName: 'Demo',
         version: '1.0.0',
         changelog: '',
+        acceptLicenseTerms: true,
         tags: ['latest'],
       }),
     )
@@ -892,6 +894,7 @@ describe('httpApiV1 handlers', () => {
         displayName: 'Demo',
         version: '1.0.0',
         changelog: '',
+        acceptLicenseTerms: true,
         tags: ['latest'],
       }),
     )
@@ -986,6 +989,115 @@ describe('httpApiV1 handlers', () => {
       }),
     )
     expect(response2.status).toBe(200)
+  })
+
+  it('transfer request requires auth', async () => {
+    vi.mocked(requireApiTokenUser).mockRejectedValueOnce(new Error('Unauthorized'))
+    const runMutation = vi.fn().mockResolvedValue(okRate())
+    const response = await __handlers.skillsPostRouterV1Handler(
+      makeCtx({ runMutation }),
+      new Request('https://example.com/api/v1/skills/demo/transfer', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ toUserHandle: 'alice' }),
+      }),
+    )
+    expect(response.status).toBe(401)
+  })
+
+  it('transfer request succeeds', async () => {
+    vi.mocked(requireApiTokenUser).mockResolvedValue({
+      userId: 'users:1',
+      user: { handle: 'p' },
+    } as never)
+
+    const runQuery = vi.fn(async (_query: unknown, args: Record<string, unknown>) => {
+      if ('slug' in args) return { _id: 'skills:1', slug: 'demo' }
+      return null
+    })
+    const runMutation = vi.fn(async (_mutation: unknown, args: Record<string, unknown>) => {
+      if ('key' in args) return okRate()
+      return { ok: true, transferId: 'skillOwnershipTransfers:1', toUserHandle: 'alice', expiresAt: 123 }
+    })
+
+    const response = await __handlers.skillsPostRouterV1Handler(
+      makeCtx({ runQuery, runMutation }),
+      new Request('https://example.com/api/v1/skills/demo/transfer', {
+        method: 'POST',
+        headers: { Authorization: 'Bearer clh_test', 'content-type': 'application/json' },
+        body: JSON.stringify({ toUserHandle: '@Alice' }),
+      }),
+    )
+    expect(response.status).toBe(200)
+    expect(runMutation).toHaveBeenCalledWith(
+      expect.anything(),
+      expect.objectContaining({
+        actorUserId: 'users:1',
+        skillId: 'skills:1',
+        toUserHandle: '@Alice',
+      }),
+    )
+  })
+
+  it('transfer accept returns 404 when no pending request exists', async () => {
+    vi.mocked(requireApiTokenUser).mockResolvedValue({
+      userId: 'users:1',
+      user: { handle: 'p' },
+    } as never)
+
+    const runQuery = vi.fn(async (_query: unknown, args: Record<string, unknown>) => {
+      if ('slug' in args) return { _id: 'skills:1', slug: 'demo' }
+      return null
+    })
+    const runMutation = vi.fn(async (_mutation: unknown, args: Record<string, unknown>) => {
+      if ('key' in args) return okRate()
+      return { ok: true }
+    })
+
+    const response = await __handlers.skillsPostRouterV1Handler(
+      makeCtx({ runQuery, runMutation }),
+      new Request('https://example.com/api/v1/skills/demo/transfer/accept', {
+        method: 'POST',
+        headers: { Authorization: 'Bearer clh_test' },
+      }),
+    )
+    expect(response.status).toBe(404)
+  })
+
+  it('transfer list returns incoming transfers', async () => {
+    vi.mocked(requireApiTokenUser).mockResolvedValue({
+      userId: 'users:1',
+      user: { handle: 'p' },
+    } as never)
+
+    const runQuery = vi.fn(async (_query: unknown, args: Record<string, unknown>) => {
+      if (isRateLimitArgs(args)) return okRate()
+      if ('userId' in args) {
+        return [
+          {
+            _id: 'skillOwnershipTransfers:1',
+            skill: { _id: 'skills:1', slug: 'demo', displayName: 'Demo' },
+            fromUser: { _id: 'users:2', handle: 'alice', displayName: 'Alice' },
+            requestedAt: 100,
+            expiresAt: 200,
+          },
+        ]
+      }
+      return null
+    })
+    const runMutation = vi.fn().mockResolvedValue(okRate())
+
+    const response = await __handlers.transfersGetRouterV1Handler(
+      makeCtx({ runQuery, runMutation }),
+      new Request('https://example.com/api/v1/transfers/incoming', {
+        method: 'GET',
+        headers: { Authorization: 'Bearer clh_test' },
+      }),
+    )
+    expect(response.status).toBe(200)
+    const payload = await response.json()
+    expect(payload.transfers).toHaveLength(1)
+    expect(payload.transfers[0]?.skill?.slug).toBe('demo')
   })
 
   it('ban user requires auth', async () => {

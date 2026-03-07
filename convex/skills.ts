@@ -61,6 +61,7 @@ export { publishVersionForUser } from './lib/skillPublish'
 
 type ReadmeResult = { path: string; text: string }
 type FileTextResult = { path: string; text: string; size: number; sha256: string }
+const PLATFORM_SKILL_LICENSE = 'MIT-0' as const
 
 const MAX_DIFF_FILE_BYTES = 200 * 1024
 const MAX_LIST_LIMIT = 50
@@ -527,6 +528,7 @@ type PublicSkillListVersion = Pick<
   '_id' | '_creationTime' | 'version' | 'createdAt' | 'changelog' | 'changelogSource'
 > & {
   parsed?: {
+    license?: typeof PLATFORM_SKILL_LICENSE
     clawdis?: {
       os?: string[]
       nix?: {
@@ -610,7 +612,13 @@ function toPublicSkillListVersion(
     createdAt: version.createdAt,
     changelog: version.changelog,
     changelogSource: version.changelogSource,
-    parsed: version.parsed?.clawdis ? { clawdis: version.parsed.clawdis } : undefined,
+    parsed:
+      version.parsed?.clawdis || version.parsed?.license
+        ? {
+            ...(version.parsed?.license ? { license: version.parsed.license } : {}),
+            ...(version.parsed?.clawdis ? { clawdis: version.parsed.clawdis } : {}),
+          }
+        : undefined,
   }
 }
 
@@ -3007,6 +3015,7 @@ export const publishVersion: ReturnType<typeof action> = action({
     displayName: v.string(),
     version: v.string(),
     changelog: v.string(),
+    acceptLicenseTerms: v.optional(v.boolean()),
     tags: v.optional(v.array(v.string())),
     forkOf: v.optional(
       v.object({
@@ -3025,6 +3034,9 @@ export const publishVersion: ReturnType<typeof action> = action({
     ),
   },
   handler: async (ctx, args): Promise<PublishResult> => {
+    if (args.acceptLicenseTerms !== true) {
+      throw new ConvexError('MIT-0 license terms must be accepted to publish skills')
+    }
     const { userId } = await requireUserFromAction(ctx)
     return publishVersionForUser(ctx, userId, args)
   },
@@ -3754,6 +3766,7 @@ export const insertVersion = internalMutation({
       frontmatter: v.record(v.string(), v.any()),
       metadata: v.optional(v.any()),
       clawdis: v.optional(v.any()),
+      license: v.optional(v.literal(PLATFORM_SKILL_LICENSE)),
     }),
     summary: v.optional(v.string()),
     qualityAssessment: v.optional(

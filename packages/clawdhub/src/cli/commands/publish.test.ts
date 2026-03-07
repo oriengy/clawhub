@@ -87,6 +87,7 @@ describe('cmdPublish', () => {
       expect(payload.displayName).toBe('My Skill')
       expect(payload.version).toBe('1.0.0')
       expect(payload.changelog).toBe('')
+      expect(payload.acceptLicenseTerms).toBe(true)
       expect(payload.tags).toEqual(['latest'])
       const files = publishForm.getAll('files') as Array<Blob & { name?: string }>
       expect(files.map((file) => String(file.name ?? '')).sort()).toEqual(['SKILL.md', 'notes.md'])

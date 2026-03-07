@@ -77,7 +77,7 @@ describe('cmdInspect', () => {
           createdAt: 1,
           updatedAt: 2,
         },
-        latestVersion: { version: '1.2.3', createdAt: 3, changelog: 'init' },
+        latestVersion: { version: '1.2.3', createdAt: 3, changelog: 'init', license: 'MIT-0' },
         owner: null,
       })
       .mockResolvedValueOnce({
@@ -107,7 +107,7 @@ describe('cmdInspect', () => {
           createdAt: 1,
           updatedAt: 2,
         },
-        latestVersion: { version: '2.0.0', createdAt: 3, changelog: 'init' },
+        latestVersion: { version: '2.0.0', createdAt: 3, changelog: 'init', license: 'MIT-0' },
         owner: null,
       })
       .mockResolvedValueOnce({
@@ -138,7 +138,7 @@ describe('cmdInspect', () => {
           createdAt: 1,
           updatedAt: 2,
         },
-        latestVersion: { version: '2.0.0', createdAt: 3, changelog: 'init' },
+        latestVersion: { version: '2.0.0', createdAt: 3, changelog: 'init', license: 'MIT-0' },
         owner: null,
       })
       .mockResolvedValueOnce({
@@ -159,6 +159,7 @@ describe('cmdInspect', () => {
 
     await cmdInspect(makeOpts(), 'demo', { version: '2.0.0' })
 
+    expect(mockLog).toHaveBeenCalledWith(expect.stringContaining('License: MIT-0'))
     expect(mockLog).toHaveBeenCalledWith('Security: SUSPICIOUS')
     expect(mockLog).toHaveBeenCalledWith('Warnings: yes')
     expect(mockLog).toHaveBeenCalledWith('Checked: 2023-11-14T22:13:20.000Z')

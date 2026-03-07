@@ -14,6 +14,7 @@
 - CI/Security: add TruffleHog pull-request scanning for verified leaked credentials (#505) (thanks @akses0).
 
 ### Changed
+- Skills: make published skill licensing explicit and fixed to MIT-0; require publish consent, surface no-attribution messaging in web/CLI/API, and remove per-skill license metadata.
 - Security/docs: document comment reporting/auto-hide behavior alongside existing skill reporting rules.
 - Security/moderation: add bounded explainable auto-ban reasons for scam comments and protect moderator/admin accounts from automated bans.
 - Moderation: banning users now also soft-deletes their authored comments (skill + soul), including legacy cleanup on re-ban.

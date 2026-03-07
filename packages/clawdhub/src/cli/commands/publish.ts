@@ -68,6 +68,7 @@ export async function cmdPublish(
         displayName,
         version,
         changelog,
+        acceptLicenseTerms: true,
         tags,
         ...(forkOf ? { forkOf } : {}),
       }),

@@ -21,6 +21,7 @@ const DEFAULT_MAX_BATCHES = 20
 const MAX_MAX_BATCHES = 200
 const DEFAULT_EMPTY_SKILL_MAX_README_BYTES = 8000
 const DEFAULT_EMPTY_SKILL_NOMINATION_THRESHOLD = 3
+const PLATFORM_SKILL_LICENSE = 'MIT-0' as const
 
 type BackfillStats = {
   skillsScanned: number
@@ -116,6 +117,7 @@ export const applySkillBackfillPatchInternal = internalMutation({
         frontmatter: v.record(v.string(), v.any()),
         metadata: v.optional(v.any()),
         clawdis: v.optional(v.any()),
+        license: v.optional(v.literal(PLATFORM_SKILL_LICENSE)),
       }),
     ),
   },

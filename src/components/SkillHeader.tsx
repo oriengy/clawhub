@@ -1,5 +1,9 @@
 import { Link } from '@tanstack/react-router'
-import type { ClawdisSkillMetadata } from 'clawhub-schema'
+import {
+  type ClawdisSkillMetadata,
+  PLATFORM_SKILL_LICENSE,
+  PLATFORM_SKILL_LICENSE_SUMMARY,
+} from 'clawhub-schema'
 import { Package } from 'lucide-react'
 import type { Doc, Id } from '../../convex/_generated/dataModel'
 import { getSkillBadges } from '../lib/badges'
@@ -188,6 +192,9 @@ export function SkillHeader({
                   Bundles the skill pack, CLI binary, and config requirements in one Nix install.
                 </div>
               ) : null}
+              <div className="skill-hero-note">
+                <strong>{PLATFORM_SKILL_LICENSE}</strong> · {PLATFORM_SKILL_LICENSE_SUMMARY}
+              </div>
               <div className="stat">
                 ⭐ {formattedStats.stars} · <Package size={14} aria-hidden="true" />{' '}
                 {formattedStats.downloads} · {formatCompactStat(skill.stats.installsCurrent ?? 0)} current
@@ -220,6 +227,7 @@ export function SkillHeader({
                   {badge}
                 </div>
               ))}
+              <div className="tag tag-accent">{PLATFORM_SKILL_LICENSE}</div>
               {isStaff && staffVisibilityTag ? (
                 <div className={`tag${isAutoHidden || isRemoved ? ' tag-accent' : ''}`}>
                   {staffVisibilityTag}

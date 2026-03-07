@@ -163,6 +163,9 @@ async function cliPublishHandler(ctx: ActionCtx, request: Request) {
   try {
     const { userId } = await requireApiTokenUser(ctx, request)
     const args = parsePublishBody(body)
+    if (args.acceptLicenseTerms !== true) {
+      return text('MIT-0 license terms must be accepted to publish skills', 400)
+    }
     const result = await publishVersionForUser(ctx, userId, args)
     return json({ ok: true, ...result })
   } catch (error) {
@@ -280,6 +283,7 @@ function parsePublishBody(body: unknown) {
     displayName: parsed.displayName,
     version: parsed.version,
     changelog: parsed.changelog,
+    acceptLicenseTerms: parsed.acceptLicenseTerms,
     tags,
     source: parsed.source ?? undefined,
     forkOf: parsed.forkOf

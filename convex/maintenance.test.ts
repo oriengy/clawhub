@@ -89,6 +89,7 @@ describe('maintenance backfill', () => {
         frontmatter: { description: 'Hello world.' },
         metadata: undefined,
         clawdis: undefined,
+        license: 'MIT-0',
       },
     })
   })
@@ -193,6 +194,7 @@ describe('maintenance backfill', () => {
         frontmatter: {},
         metadata: undefined,
         clawdis: undefined,
+        license: 'MIT-0',
       },
     })
   })

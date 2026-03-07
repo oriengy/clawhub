@@ -72,6 +72,7 @@ export const CliPublishRequestSchema = type({
   displayName: 'string',
   version: 'string',
   changelog: 'string',
+  acceptLicenseTerms: 'boolean?',
   tags: 'string[]?',
   forkOf: type({
     slug: 'string',
@@ -160,6 +161,7 @@ export const ApiV1SkillListResponseSchema = type({
       version: 'string',
       createdAt: 'number',
       changelog: 'string',
+      license: '"MIT-0"|null?',
     }).optional(),
   }).array(),
   nextCursor: 'string|null',
@@ -179,6 +181,7 @@ export const ApiV1SkillResponseSchema = type({
     version: 'string',
     createdAt: 'number',
     changelog: 'string',
+    license: '"MIT-0"|null?',
   }).or('null'),
   owner: type({
     handle: 'string|null',
@@ -209,6 +212,7 @@ export const ApiV1SkillVersionResponseSchema = type({
     createdAt: 'number',
     changelog: 'string',
     changelogSource: '"auto"|"user"|null?',
+    license: '"MIT-0"|null?',
     files: 'unknown?',
   }).or('null'),
   skill: type({
@@ -230,6 +234,42 @@ export const ApiV1PublishResponseSchema = type({
 
 export const ApiV1DeleteResponseSchema = type({
   ok: 'true',
+})
+
+export const ApiV1TransferRequestResponseSchema = type({
+  ok: 'true',
+  transferId: 'string',
+  toUserHandle: 'string',
+  expiresAt: 'number',
+})
+
+export const ApiV1TransferDecisionResponseSchema = type({
+  ok: 'true',
+  skillSlug: 'string?',
+})
+
+export const ApiV1TransferListResponseSchema = type({
+  transfers: type({
+    _id: 'string',
+    skill: type({
+      _id: 'string',
+      slug: 'string',
+      displayName: 'string',
+    }),
+    fromUser: type({
+      _id: 'string',
+      handle: 'string|null',
+      displayName: 'string|null',
+    }).optional(),
+    toUser: type({
+      _id: 'string',
+      handle: 'string|null',
+      displayName: 'string|null',
+    }).optional(),
+    message: 'string?',
+    requestedAt: 'number',
+    expiresAt: 'number',
+  }).array(),
 })
 
 export const ApiV1BanUserResponseSchema = type({

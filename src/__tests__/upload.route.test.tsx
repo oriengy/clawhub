@@ -94,6 +94,11 @@ describe('Upload route', () => {
     const file = new File(['hello'], 'SKILL.md', { type: 'text/markdown' })
     const input = screen.getByTestId('upload-input') as HTMLInputElement
     fireEvent.change(input, { target: { files: [file] } })
+    fireEvent.click(
+      screen.getByRole('checkbox', {
+        name: /i have the rights to this skill and agree to publish it under mit-0/i,
+      }),
+    )
 
     const publishButton = screen.getByRole('button', { name: /publish/i }) as HTMLButtonElement
     expect(await screen.findByText(/All checks passed/i)).toBeTruthy()
@@ -124,6 +129,11 @@ describe('Upload route', () => {
 
     const input = screen.getByTestId('upload-input') as HTMLInputElement
     fireEvent.change(input, { target: { files: [zipFile] } })
+    fireEvent.click(
+      screen.getByRole('checkbox', {
+        name: /i have the rights to this skill and agree to publish it under mit-0/i,
+      }),
+    )
 
     expect(await screen.findByText('notes.txt', {}, { timeout: 3000 })).toBeTruthy()
     expect(screen.getByText('SKILL.md')).toBeTruthy()
@@ -152,6 +162,11 @@ describe('Upload route', () => {
 
     const input = screen.getByTestId('upload-input') as HTMLInputElement
     fireEvent.change(input, { target: { files: [file] } })
+    fireEvent.click(
+      screen.getByRole('checkbox', {
+        name: /i have the rights to this skill and agree to publish it under mit-0/i,
+      }),
+    )
 
     expect(await screen.findByText('SKILL.md')).toBeTruthy()
     expect(await screen.findByText(/All checks passed/i)).toBeTruthy()
@@ -217,6 +232,11 @@ describe('Upload route', () => {
     const junk = new File(['junk'], '.DS_Store', { type: 'application/octet-stream' })
     const input = screen.getByTestId('upload-input') as HTMLInputElement
     fireEvent.change(input, { target: { files: [skill, junk] } })
+    fireEvent.click(
+      screen.getByRole('checkbox', {
+        name: /i have the rights to this skill and agree to publish it under mit-0/i,
+      }),
+    )
 
     expect(await screen.findByText('SKILL.md')).toBeTruthy()
     expect(screen.queryByText('.DS_Store')).toBeNull()
@@ -246,6 +266,11 @@ describe('Upload route', () => {
     const file = new File(['hello'], 'SKILL.md', { type: 'text/markdown' })
     const input = screen.getByTestId('upload-input') as HTMLInputElement
     fireEvent.change(input, { target: { files: [file] } })
+    fireEvent.click(
+      screen.getByRole('checkbox', {
+        name: /i have the rights to this skill and agree to publish it under mit-0/i,
+      }),
+    )
     const publishButton = screen.getByRole('button', { name: /publish/i }) as HTMLButtonElement
     await screen.findByText(/All checks passed/i)
     fireEvent.click(publishButton)

@@ -1,6 +1,8 @@
 import { apiRequest, fetchText, registryUrl } from '../../http.js'
 import {
   ApiRoutes,
+  PLATFORM_SKILL_LICENSE,
+  PLATFORM_SKILL_LICENSE_SUMMARY,
   ApiV1SkillResponseSchema,
   ApiV1SkillVersionListResponseSchema,
   ApiV1SkillVersionResponseSchema,
@@ -131,6 +133,8 @@ export async function cmdInspect(opts: GlobalOpts, slug: string, options: Inspec
       printSkillSummary({
         skill,
         latestVersion: skillResult.latestVersion,
+        versionLicense:
+          (versionResult?.version as { license?: string | null } | undefined)?.license ?? null,
         owner: skillResult.owner,
       })
     }
@@ -186,7 +190,13 @@ function printSkillSummary(result: {
     createdAt: number
     updatedAt: number
   }
-  latestVersion?: { version: string; createdAt: number; changelog: string } | null
+  latestVersion?: {
+    version: string
+    createdAt: number
+    changelog: string
+    license?: string | null
+  } | null
+  versionLicense?: string | null
   owner?: { handle?: string | null; displayName?: string | null; image?: string | null } | null
 }) {
   const { skill } = result
@@ -199,6 +209,9 @@ function printSkillSummary(result: {
   if (result.latestVersion?.version) {
     console.log(`Latest: ${result.latestVersion.version}`)
   }
+  console.log(
+    `License: ${result.versionLicense ?? result.latestVersion?.license ?? PLATFORM_SKILL_LICENSE} (${PLATFORM_SKILL_LICENSE_SUMMARY})`,
+  )
   const tags = normalizeTags(skill.tags)
   const tagEntries = Object.entries(tags)
   if (tagEntries.length > 0) {
