@@ -44,15 +44,14 @@ function SkillsHome() {
       <section className="hero">
         <div className="hero-inner">
           <div className="hero-copy fade-up" data-delay="1">
-            <span className="hero-badge">Lobster-light. Agent-right.</span>
-            <h1 className="hero-title">ClawHub, the skill dock for sharp agents.</h1>
+            <span className="hero-badge">轻量如龙虾，精准如利爪。</span>
+            <h1 className="hero-title">ClawHub，智能体的技能码头。</h1>
             <p className="hero-subtitle">
-              Upload AgentSkills bundles, version them like npm, and make them searchable with
-              vectors. No gatekeeping, just signal.
+              上传 AgentSkills 包，像 npm 一样版本化管理，通过向量搜索让它们触手可及。没有门槛，只有信号。
             </p>
             <div style={{ display: 'flex', gap: 12, marginTop: 20 }}>
               <Link to="/upload" search={{ updateSlug: undefined }} className="btn btn-primary">
-                Publish a skill
+                发布技能
               </Link>
               <Link
                 to="/skills"
@@ -67,13 +66,13 @@ function SkillsHome() {
                 }}
                 className="btn"
               >
-                Browse skills
+                浏览技能
               </Link>
             </div>
           </div>
           <div className="hero-card hero-search-card fade-up" data-delay="2">
             <div className="hero-install" style={{ marginTop: 18 }}>
-              <div className="stat">Search skills. Versioned, rollback-ready.</div>
+              <div className="stat">搜索技能。版本化管理，支持回滚。</div>
               <InstallSwitcher exampleSlug="sonoscli" />
             </div>
           </div>
@@ -81,24 +80,24 @@ function SkillsHome() {
       </section>
 
       <section className="section">
-        <h2 className="section-title">Highlighted skills</h2>
-        <p className="section-subtitle">Curated signal — highlighted for quick trust.</p>
+        <h2 className="section-title">精选技能</h2>
+        <p className="section-subtitle">策展精选 — 标记为值得信赖的技能。</p>
         <div className="grid">
           {highlighted.length === 0 ? (
-            <div className="card">No highlighted skills yet.</div>
+            <div className="card">暂无精选技能。</div>
           ) : (
             highlighted.map((entry) => (
               <SkillCard
                 key={entry.skill._id}
                 skill={entry.skill}
                 badge={getSkillBadges(entry.skill)}
-                summaryFallback="A fresh skill bundle."
+                summaryFallback="全新的技能包。"
                 meta={
                   <div className="skill-card-footer-rows">
                     <UserBadge
                       user={entry.owner}
                       fallbackHandle={entry.ownerHandle ?? null}
-                      prefix="by"
+                      prefix="作者"
                       link={false}
                     />
                     <div className="stat">
@@ -113,23 +112,23 @@ function SkillsHome() {
       </section>
 
       <section className="section">
-        <h2 className="section-title">Popular skills</h2>
-        <p className="section-subtitle">Most-downloaded, non-suspicious picks.</p>
+        <h2 className="section-title">热门技能</h2>
+        <p className="section-subtitle">下载量最高的安全技能。</p>
         <div className="grid">
           {popular.length === 0 ? (
-            <div className="card">No skills yet. Be the first.</div>
+            <div className="card">暂无技能。成为第一个发布者吧。</div>
           ) : (
             popular.map((entry) => (
               <SkillCard
                 key={entry.skill._id}
                 skill={entry.skill}
-                summaryFallback="Agent-ready skill pack."
+                summaryFallback="即用型 Agent 技能包。"
                 meta={
                   <div className="skill-card-footer-rows">
                     <UserBadge
                       user={entry.owner}
                       fallbackHandle={entry.ownerHandle ?? null}
-                      prefix="by"
+                      prefix="作者"
                       link={false}
                     />
                     <div className="stat">
@@ -155,7 +154,7 @@ function SkillsHome() {
             }}
             className="btn"
           >
-            See all skills
+            查看全部技能
           </Link>
         </div>
       </section>
@@ -182,15 +181,14 @@ function OnlyCrabsHome() {
       <section className="hero">
         <div className="hero-inner">
           <div className="hero-copy fade-up" data-delay="1">
-            <span className="hero-badge">SOUL.md, shared.</span>
-            <h1 className="hero-title">SoulHub, where system lore lives.</h1>
+            <span className="hero-badge">SOUL.md，共享传承。</span>
+            <h1 className="hero-title">SoulHub，系统传说的归宿。</h1>
             <p className="hero-subtitle">
-              Share SOUL.md bundles, version them like docs, and keep personal system lore in one
-              public place.
+              分享 SOUL.md 包，像文档一样版本化管理，将个人系统传说集中在一个公开的地方。
             </p>
             <div style={{ display: 'flex', gap: 12, marginTop: 20 }}>
               <Link to="/upload" search={{ updateSlug: undefined }} className="btn btn-primary">
-                Publish a soul
+                发布灵魂
               </Link>
               <Link
                 to="/souls"
@@ -203,7 +201,7 @@ function OnlyCrabsHome() {
                 }}
                 className="btn"
               >
-                Browse souls
+                浏览灵魂
               </Link>
             </div>
           </div>
@@ -227,30 +225,30 @@ function OnlyCrabsHome() {
               <span className="mono">/</span>
               <input
                 className="search-input"
-                placeholder="Search souls, prompts, or lore"
+                placeholder="搜索灵魂、提示词或传说"
                 value={query}
                 onChange={(event) => setQuery(event.target.value)}
               />
             </form>
             <div className="hero-install" style={{ marginTop: 18 }}>
-              <div className="stat">Search souls. Versioned, readable, easy to remix.</div>
+              <div className="stat">搜索灵魂。版本化管理，可读性强，易于二次创作。</div>
             </div>
           </div>
         </div>
       </section>
 
       <section className="section">
-        <h2 className="section-title">Latest souls</h2>
-        <p className="section-subtitle">Newest SOUL.md bundles across the hub.</p>
+        <h2 className="section-title">最新灵魂</h2>
+        <p className="section-subtitle">平台上最新的 SOUL.md 包。</p>
         <div className="grid">
           {latest.length === 0 ? (
-            <div className="card">No souls yet. Be the first.</div>
+            <div className="card">暂无灵魂。成为第一个发布者吧。</div>
           ) : (
             latest.map((soul) => (
               <SoulCard
                 key={soul._id}
                 soul={soul}
-                summaryFallback="A SOUL.md bundle."
+                summaryFallback="一个 SOUL.md 包。"
                 meta={
                   <div className="stat">
                     <SoulStatsTripletLine stats={soul.stats} />
@@ -272,7 +270,7 @@ function OnlyCrabsHome() {
             }}
             className="btn"
           >
-            See all souls
+            查看全部灵魂
           </Link>
         </div>
       </section>

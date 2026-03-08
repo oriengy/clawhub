@@ -109,12 +109,12 @@ function SoulsIndex() {
       <header className="skills-header">
         <div>
           <h1 className="section-title" style={{ marginBottom: 8 }}>
-            Souls
+            灵魂
           </h1>
           <p className="section-subtitle" style={{ marginBottom: 0 }}>
             {isLoadingSouls
-              ? 'Loading souls…'
-              : `${showing}${typeof total === 'number' ? ` of ${total}` : ''} souls.`}
+              ? '加载灵魂中…'
+              : `${showing}${typeof total === 'number' ? ` / ${total}` : ''} 个灵魂。`}
           </p>
         </div>
         <div className="skills-toolbar">
@@ -132,7 +132,7 @@ function SoulsIndex() {
                   replace: true,
                 })
               }}
-              placeholder="Filter by name, slug, or summary…"
+              placeholder="按名称、标识或摘要筛选…"
             />
           </div>
           <div className="skills-toolbar-row">
@@ -150,13 +150,13 @@ function SoulsIndex() {
                   replace: true,
                 })
               }}
-              aria-label="Sort souls"
+              aria-label="排序灵魂"
             >
-              <option value="newest">Newest</option>
-              <option value="updated">Recently updated</option>
-              <option value="downloads">Downloads</option>
-              <option value="stars">Stars</option>
-              <option value="name">Name</option>
+              <option value="newest">最新</option>
+              <option value="updated">最近更新</option>
+              <option value="downloads">下载量</option>
+              <option value="stars">收藏数</option>
+              <option value="name">名称</option>
             </select>
             <button
               className="skills-dir"
@@ -187,7 +187,7 @@ function SoulsIndex() {
                 })
               }}
             >
-              {view === 'cards' ? 'List' : 'Cards'}
+              {view === 'cards' ? '列表' : '卡片'}
             </button>
           </div>
         </div>
@@ -195,17 +195,17 @@ function SoulsIndex() {
 
       {isLoadingSouls ? (
         <div className="card">
-          <div className="loading-indicator">Loading souls…</div>
+          <div className="loading-indicator">加载灵魂中…</div>
         </div>
       ) : showing === 0 ? (
-        <div className="card">No souls match that filter.</div>
+        <div className="card">没有匹配的灵魂。</div>
       ) : view === 'cards' ? (
         <div className="grid">
           {sorted.map((soul) => (
             <SoulCard
               key={soul._id}
               soul={soul}
-              summaryFallback="A SOUL.md bundle."
+              summaryFallback="一个 SOUL.md 包。"
               meta={
                 <div className="stat">
                   <SoulStatsTripletLine stats={soul.stats} />
@@ -228,7 +228,7 @@ function SoulsIndex() {
                   <span>{soul.displayName}</span>
                   <span className="skills-row-slug">/{soul.slug}</span>
                 </div>
-                <div className="skills-row-summary">{soul.summary ?? 'SOUL.md bundle.'}</div>
+                <div className="skills-row-summary">{soul.summary ?? 'SOUL.md 包。'}</div>
               </div>
               <div className="skills-row-metrics">
                 <SoulMetricsRow stats={soul.stats} />

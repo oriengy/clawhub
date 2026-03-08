@@ -72,7 +72,7 @@ export default function Header() {
                 focus: undefined,
               }}
             >
-              Souls
+              灵魂
             </Link>
           ) : (
             <Link
@@ -87,13 +87,13 @@ export default function Header() {
                 focus: undefined,
               }}
             >
-              Skills
+              技能
             </Link>
           )}
           <Link to="/upload" search={{ updateSlug: undefined }}>
-            Upload
+            发布
           </Link>
-          {isSoulMode ? null : <Link to="/import">Import</Link>}
+          {isSoulMode ? null : <Link to="/import">导入</Link>}
           <Link
             to={isSoulMode ? '/souls' : '/skills'}
             search={
@@ -116,12 +116,12 @@ export default function Header() {
                   }
             }
           >
-            Search
+            搜索
           </Link>
-          {me ? <Link to="/stars">Stars</Link> : null}
+          {me ? <Link to="/stars">收藏</Link> : null}
           {isStaff ? (
             <Link to="/management" search={{ skill: undefined }}>
-              Management
+              管理
             </Link>
           ) : null}
         </nav>
@@ -151,7 +151,7 @@ export default function Header() {
                         focus: undefined,
                       }}
                     >
-                      Souls
+                      灵魂
                     </Link>
                   ) : (
                     <Link
@@ -166,18 +166,18 @@ export default function Header() {
                         focus: undefined,
                       }}
                     >
-                      Skills
+                      技能
                     </Link>
                   )}
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
                   <Link to="/upload" search={{ updateSlug: undefined }}>
-                    Upload
+                    发布
                   </Link>
                 </DropdownMenuItem>
                 {isSoulMode ? null : (
                   <DropdownMenuItem asChild>
-                    <Link to="/import">Import</Link>
+                    <Link to="/import">导入</Link>
                   </DropdownMenuItem>
                 )}
                 <DropdownMenuItem asChild>
@@ -203,33 +203,33 @@ export default function Header() {
                           }
                     }
                   >
-                    Search
+                    搜索
                   </Link>
                 </DropdownMenuItem>
                 {me ? (
                   <DropdownMenuItem asChild>
-                    <Link to="/stars">Stars</Link>
+                    <Link to="/stars">收藏</Link>
                   </DropdownMenuItem>
                 ) : null}
                 {isStaff ? (
                   <DropdownMenuItem asChild>
                     <Link to="/management" search={{ skill: undefined }}>
-                      Management
+                      管理
                     </Link>
                   </DropdownMenuItem>
                 ) : null}
                 <DropdownMenuSeparator />
                 <DropdownMenuItem onClick={() => setTheme('system')}>
                   <Monitor className="h-4 w-4" aria-hidden="true" />
-                  System
+                  跟随系统
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={() => setTheme('light')}>
                   <Sun className="h-4 w-4" aria-hidden="true" />
-                  Light
+                  浅色
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={() => setTheme('dark')}>
                   <Moon className="h-4 w-4" aria-hidden="true" />
-                  Dark
+                  深色
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
@@ -273,13 +273,13 @@ export default function Header() {
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
                 <DropdownMenuItem asChild>
-                  <Link to="/dashboard">Dashboard</Link>
+                  <Link to="/dashboard">控制台</Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
-                  <Link to="/settings">Settings</Link>
+                  <Link to="/settings">设置</Link>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem onClick={() => void signOut()}>Sign out</DropdownMenuItem>
+                <DropdownMenuItem onClick={() => void signOut()}>退出</DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
           ) : (
@@ -294,8 +294,8 @@ export default function Header() {
                 )
               }
             >
-              <span className="sign-in-label">Sign in</span>
-              <span className="sign-in-provider">with GitHub</span>
+              <span className="sign-in-label">登录</span>
+              <span className="sign-in-provider">GitHub</span>
             </button>
           )}
         </div>

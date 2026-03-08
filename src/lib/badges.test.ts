@@ -64,7 +64,7 @@ describe('badges', () => {
         getSkillBadges({
           badges: { deprecated: { byUserId: 'user1' as never, at: 123 } },
         }),
-      ).toEqual(['Deprecated'])
+      ).toEqual(['已弃用'])
     })
 
     it('returns Official when official is set', () => {
@@ -72,7 +72,7 @@ describe('badges', () => {
         getSkillBadges({
           badges: { official: { byUserId: 'user1' as never, at: 123 } },
         }),
-      ).toEqual(['Official'])
+      ).toEqual(['官方'])
     })
 
     it('returns Highlighted when highlighted is set', () => {
@@ -80,7 +80,7 @@ describe('badges', () => {
         getSkillBadges({
           badges: { highlighted: { byUserId: 'user1' as never, at: 123 } },
         }),
-      ).toEqual(['Highlighted'])
+      ).toEqual(['精选'])
     })
 
     it('returns all badges in correct order', () => {
@@ -92,7 +92,7 @@ describe('badges', () => {
             highlighted: { byUserId: 'user1' as never, at: 123 },
           },
         }),
-      ).toEqual(['Deprecated', 'Official', 'Highlighted'])
+      ).toEqual(['已弃用', '官方', '精选'])
     })
   })
 })

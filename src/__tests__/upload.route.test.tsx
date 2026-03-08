@@ -62,10 +62,10 @@ describe('Upload route', () => {
 
   it('shows validation issues before submit', async () => {
     render(<Upload />)
-    const publishButton = screen.getByRole('button', { name: /publish/i })
+    const publishButton = screen.getByRole('button', { name: /发布/i })
     expect(publishButton.getAttribute('disabled')).not.toBeNull()
-    expect(screen.getByText(/Slug is required/i)).toBeTruthy()
-    expect(screen.getByText(/Display name is required/i)).toBeTruthy()
+    expect(screen.getByText(/标识（Slug）为必填项/i)).toBeTruthy()
+    expect(screen.getByText(/显示名称为必填项/i)).toBeTruthy()
   })
 
   it('marks the input for folder uploads', async () => {
@@ -82,7 +82,7 @@ describe('Upload route', () => {
     fireEvent.change(screen.getByPlaceholderText('skill-name'), {
       target: { value: 'cool-skill' },
     })
-    fireEvent.change(screen.getByPlaceholderText('My skill'), {
+    fireEvent.change(screen.getByPlaceholderText('我的技能'), {
       target: { value: 'Cool Skill' },
     })
     fireEvent.change(screen.getByPlaceholderText('1.0.0'), {
@@ -96,12 +96,12 @@ describe('Upload route', () => {
     fireEvent.change(input, { target: { files: [file] } })
     fireEvent.click(
       screen.getByRole('checkbox', {
-        name: /i have the rights to this skill and agree to publish it under mit-0/i,
+        name: /我拥有此技能的权利，并同意以 MIT-0 许可发布/i,
       }),
     )
 
-    const publishButton = screen.getByRole('button', { name: /publish/i }) as HTMLButtonElement
-    expect(await screen.findByText(/All checks passed/i)).toBeTruthy()
+    const publishButton = screen.getByRole('button', { name: /发布/i }) as HTMLButtonElement
+    expect(await screen.findByText(/全部检查通过/i)).toBeTruthy()
     expect(publishButton.getAttribute('disabled')).toBeNull()
   })
 
@@ -110,7 +110,7 @@ describe('Upload route', () => {
     fireEvent.change(screen.getByPlaceholderText('skill-name'), {
       target: { value: 'cool-skill' },
     })
-    fireEvent.change(screen.getByPlaceholderText('My skill'), {
+    fireEvent.change(screen.getByPlaceholderText('我的技能'), {
       target: { value: 'Cool Skill' },
     })
     fireEvent.change(screen.getByPlaceholderText('1.0.0'), {
@@ -131,13 +131,13 @@ describe('Upload route', () => {
     fireEvent.change(input, { target: { files: [zipFile] } })
     fireEvent.click(
       screen.getByRole('checkbox', {
-        name: /i have the rights to this skill and agree to publish it under mit-0/i,
+        name: /我拥有此技能的权利，并同意以 MIT-0 许可发布/i,
       }),
     )
 
     expect(await screen.findByText('notes.txt', {}, { timeout: 3000 })).toBeTruthy()
     expect(screen.getByText('SKILL.md')).toBeTruthy()
-    expect(await screen.findByText(/All checks passed/i, {}, { timeout: 3000 })).toBeTruthy()
+    expect(await screen.findByText(/全部检查通过/i, {}, { timeout: 3000 })).toBeTruthy()
   })
 
   it('unwraps folder uploads so SKILL.md can be at the top-level', async () => {
@@ -147,7 +147,7 @@ describe('Upload route', () => {
     fireEvent.change(screen.getByPlaceholderText('skill-name'), {
       target: { value: 'ynab' },
     })
-    fireEvent.change(screen.getByPlaceholderText('My skill'), {
+    fireEvent.change(screen.getByPlaceholderText('我的技能'), {
       target: { value: 'YNAB' },
     })
     fireEvent.change(screen.getByPlaceholderText('1.0.0'), {
@@ -164,14 +164,14 @@ describe('Upload route', () => {
     fireEvent.change(input, { target: { files: [file] } })
     fireEvent.click(
       screen.getByRole('checkbox', {
-        name: /i have the rights to this skill and agree to publish it under mit-0/i,
+        name: /我拥有此技能的权利，并同意以 MIT-0 许可发布/i,
       }),
     )
 
     expect(await screen.findByText('SKILL.md')).toBeTruthy()
-    expect(await screen.findByText(/All checks passed/i)).toBeTruthy()
+    expect(await screen.findByText(/全部检查通过/i)).toBeTruthy()
 
-    fireEvent.click(screen.getByRole('button', { name: /publish/i }))
+    fireEvent.click(screen.getByRole('button', { name: /发布/i }))
     await waitFor(() => {
       expect(
         publishVersion.mock.calls.some((call) =>
@@ -190,7 +190,7 @@ describe('Upload route', () => {
     fireEvent.change(screen.getByPlaceholderText('skill-name'), {
       target: { value: 'cool-skill' },
     })
-    fireEvent.change(screen.getByPlaceholderText('My skill'), {
+    fireEvent.change(screen.getByPlaceholderText('我的技能'), {
       target: { value: 'Cool Skill' },
     })
     fireEvent.change(screen.getByPlaceholderText('1.0.0'), {
@@ -208,8 +208,8 @@ describe('Upload route', () => {
     fireEvent.change(input, { target: { files: [skill, png] } })
 
     expect(await screen.findByText('screenshot.png')).toBeTruthy()
-    fireEvent.click(screen.getByRole('button', { name: /publish/i }))
-    expect(await screen.findByText(/Remove non-text files: screenshot\.png/i)).toBeTruthy()
+    fireEvent.click(screen.getByRole('button', { name: /发布/i }))
+    expect(await screen.findByText(/请移除非文本文件：screenshot\.png/i)).toBeTruthy()
     expect(screen.getByText('screenshot.png')).toBeTruthy()
   })
 
@@ -218,7 +218,7 @@ describe('Upload route', () => {
     fireEvent.change(screen.getByPlaceholderText('skill-name'), {
       target: { value: 'cool-skill' },
     })
-    fireEvent.change(screen.getByPlaceholderText('My skill'), {
+    fireEvent.change(screen.getByPlaceholderText('我的技能'), {
       target: { value: 'Cool Skill' },
     })
     fireEvent.change(screen.getByPlaceholderText('1.0.0'), {
@@ -234,14 +234,14 @@ describe('Upload route', () => {
     fireEvent.change(input, { target: { files: [skill, junk] } })
     fireEvent.click(
       screen.getByRole('checkbox', {
-        name: /i have the rights to this skill and agree to publish it under mit-0/i,
+        name: /我拥有此技能的权利，并同意以 MIT-0 许可发布/i,
       }),
     )
 
     expect(await screen.findByText('SKILL.md')).toBeTruthy()
     expect(screen.queryByText('.DS_Store')).toBeNull()
-    expect(await screen.findByText(/Ignored 1 macOS junk file/i)).toBeTruthy()
-    expect(await screen.findByText(/All checks passed/i)).toBeTruthy()
+    expect(await screen.findByText(/已忽略 1 个 macOS 垃圾文件/i)).toBeTruthy()
+    expect(await screen.findByText(/全部检查通过/i)).toBeTruthy()
   })
 
   it('surfaces publish errors and stays on page', async () => {
@@ -251,7 +251,7 @@ describe('Upload route', () => {
     fireEvent.change(screen.getByPlaceholderText('skill-name'), {
       target: { value: 'cool-skill' },
     })
-    fireEvent.change(screen.getByPlaceholderText('My skill'), {
+    fireEvent.change(screen.getByPlaceholderText('我的技能'), {
       target: { value: 'Cool Skill' },
     })
     fireEvent.change(screen.getByPlaceholderText('1.0.0'), {
@@ -260,7 +260,7 @@ describe('Upload route', () => {
     fireEvent.change(screen.getByPlaceholderText('latest, stable'), {
       target: { value: 'latest' },
     })
-    fireEvent.change(screen.getByPlaceholderText('Describe what changed in this skill...'), {
+    fireEvent.change(screen.getByPlaceholderText('描述此技能的变更内容...'), {
       target: { value: 'Initial drop.' },
     })
     const file = new File(['hello'], 'SKILL.md', { type: 'text/markdown' })
@@ -268,11 +268,11 @@ describe('Upload route', () => {
     fireEvent.change(input, { target: { files: [file] } })
     fireEvent.click(
       screen.getByRole('checkbox', {
-        name: /i have the rights to this skill and agree to publish it under mit-0/i,
+        name: /我拥有此技能的权利，并同意以 MIT-0 许可发布/i,
       }),
     )
-    const publishButton = screen.getByRole('button', { name: /publish/i }) as HTMLButtonElement
-    await screen.findByText(/All checks passed/i)
+    const publishButton = screen.getByRole('button', { name: /发布/i }) as HTMLButtonElement
+    await screen.findByText(/全部检查通过/i)
     fireEvent.click(publishButton)
     expect(await screen.findByText(/Changelog is required/i)).toBeTruthy()
   })
@@ -289,7 +289,7 @@ describe('Upload route', () => {
         return {
           available: false,
           reason: 'taken',
-          message: 'Slug is already taken. Choose a different slug.',
+          message: '标识已被占用。请选择其他标识。',
           url: '/alice/taken-skill',
         }
       }
@@ -300,7 +300,7 @@ describe('Upload route', () => {
     fireEvent.change(screen.getByPlaceholderText('skill-name'), {
       target: { value: 'taken-skill' },
     })
-    fireEvent.change(screen.getByPlaceholderText('My skill'), {
+    fireEvent.change(screen.getByPlaceholderText('我的技能'), {
       target: { value: 'Taken Skill' },
     })
     fireEvent.change(screen.getByPlaceholderText('1.0.0'), {
@@ -309,15 +309,15 @@ describe('Upload route', () => {
     fireEvent.change(screen.getByPlaceholderText('latest, stable'), {
       target: { value: 'latest' },
     })
-    fireEvent.change(screen.getByPlaceholderText('Describe what changed in this skill...'), {
+    fireEvent.change(screen.getByPlaceholderText('描述此技能的变更内容...'), {
       target: { value: 'Initial drop.' },
     })
     const file = new File(['hello'], 'SKILL.md', { type: 'text/markdown' })
     const input = screen.getByTestId('upload-input') as HTMLInputElement
     fireEvent.change(input, { target: { files: [file] } })
 
-    expect(await screen.findByText(/Slug is already taken\. Choose a different slug\./i)).toBeTruthy()
+    expect(await screen.findByText(/标识已被占用。请选择其他标识。/)).toBeTruthy()
     expect(screen.getByRole('link', { name: '/alice/taken-skill' })).toBeTruthy()
-    expect(screen.getByRole('button', { name: /publish skill/i }).getAttribute('disabled')).not.toBeNull()
+    expect(screen.getByRole('button', { name: /发布技能/i }).getAttribute('disabled')).not.toBeNull()
   })
 })

@@ -21,7 +21,7 @@ describe('uploadUtils', () => {
     expect(formatPublishError({ data: '  whoops  ' })).toBe('whoops')
     expect(formatPublishError({ data: { message: '  nope ' } })).toBe('nope')
     expect(formatPublishError({ data: 'Server Error Called by client' })).toBe(
-      'Publish failed. Please try again.',
+      '发布失败。请重试。',
     )
   })
 
@@ -32,8 +32,8 @@ describe('uploadUtils', () => {
       ),
     ).toBe('Bad')
     expect(formatPublishError(new Error('ConvexError: Bad'))).toBe('Bad')
-    expect(formatPublishError(new Error('Server Error'))).toBe('Publish failed. Please try again.')
-    expect(formatPublishError('wat')).toBe('Publish failed. Please try again.')
+    expect(formatPublishError(new Error('Server Error'))).toBe('发布失败。请重试。')
+    expect(formatPublishError('wat')).toBe('发布失败。请重试。')
   })
 
   it('detects text files via MIME type and extension', () => {

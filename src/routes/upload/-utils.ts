@@ -39,7 +39,7 @@ export function formatBytes(bytes: number) {
 }
 
 export function formatPublishError(error: unknown) {
-  return getUserFacingConvexError(error, 'Publish failed. Please try again.')
+  return getUserFacingConvexError(error, '发布失败。请重试。')
 }
 
 export function isTextFile(file: File) {

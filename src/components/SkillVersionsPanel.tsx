@@ -12,12 +12,12 @@ export function SkillVersionsPanel({ versions, nixPlugin, skillSlug }: SkillVers
     <div className="tab-body">
       <div>
         <h2 className="section-title" style={{ fontSize: '1.2rem', margin: 0 }}>
-          Versions
+          版本
         </h2>
         <p className="section-subtitle" style={{ margin: 0 }}>
           {nixPlugin
-            ? 'Review release history and changelog.'
-            : 'Download older releases or scan the changelog.'}
+            ? '查看发布历史和更新日志。'
+            : '下载旧版本或查看更新日志。'}
         </p>
       </div>
       <div className="version-scroll">

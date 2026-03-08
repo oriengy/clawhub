@@ -35,12 +35,12 @@ describe('getPublicSlugCollision', () => {
         result: {
           available: false,
           reason: 'taken',
-          message: 'Slug is already taken. Choose a different slug.',
+          message: '标识已被占用。请选择其他标识。',
           url: '/alice/demo',
         },
       }),
     ).toEqual({
-      message: 'Slug is already taken. Choose a different slug.',
+      message: '标识已被占用。请选择其他标识。',
       url: '/alice/demo',
     })
   })
@@ -58,7 +58,7 @@ describe('getPublicSlugCollision', () => {
         },
       }),
     ).toEqual({
-      message: 'Slug is already taken. Choose a different slug.',
+      message: '标识已被占用。请选择其他标识。',
       url: null,
     })
   })

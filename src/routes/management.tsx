@@ -139,7 +139,7 @@ function Management() {
   if (!staff) {
     return (
       <main className="section">
-        <div className="card">Management only.</div>
+        <div className="card">仅限管理员访问。</div>
       </main>
     )
   }
@@ -147,7 +147,7 @@ function Management() {
   if (!recentVersions || !reportedSkills || !duplicateCandidates) {
     return (
       <main className="section">
-        <div className="card">Loading management console…</div>
+        <div className="card">加载管理控制台中…</div>
       </main>
     )
   }
@@ -176,38 +176,38 @@ function Management() {
     : reportedSkills
   const reportCountLabel =
     filteredReportedSkills.length === 0 && reportedSkills.length > 0
-      ? 'No matching reports.'
-      : 'No reports yet.'
-  const reportSummary = `Showing ${filteredReportedSkills.length} of ${reportedSkills.length}`
+      ? '没有匹配的举报。'
+      : '暂无举报。'
+  const reportSummary = `显示 ${filteredReportedSkills.length} / ${reportedSkills.length}`
 
   const filteredUsers = userResult?.items ?? []
   const userTotal = userResult?.total ?? 0
   const userSummary = userResult
-    ? `Showing ${filteredUsers.length} of ${userTotal}`
-    : 'Loading users…'
+    ? `显示 ${filteredUsers.length} / ${userTotal}`
+    : '加载用户中…'
   const userEmptyLabel = userResult
     ? filteredUsers.length === 0
       ? userQuery
-        ? 'No matching users.'
-        : 'No users yet.'
+        ? '没有匹配的用户。'
+        : '暂无用户。'
       : ''
-    : 'Loading users…'
+    : '加载用户中…'
 
   return (
     <main className="section">
-      <h1 className="section-title">Management console</h1>
-      <p className="section-subtitle">Moderation, curation, and ownership tools.</p>
+      <h1 className="section-title">管理控制台</h1>
+      <p className="section-subtitle">审核、策展和所有权管理工具。</p>
 
       <div className="card">
         <h2 className="section-title" style={{ fontSize: '1.2rem', margin: 0 }}>
-          Reported skills
+          被举报的技能
         </h2>
         <div className="management-controls">
           <div className="management-control management-search">
-            <span className="mono">Filter</span>
+            <span className="mono">筛选</span>
             <input
               type="search"
-              placeholder="Search reported skills"
+              placeholder="搜索被举报的技能"
               value={reportSearch}
               onChange={(event) => setReportSearch(event.target.value)}
             />
@@ -233,9 +233,9 @@ function Management() {
                     </Link>
                     <div className="section-subtitle" style={{ margin: 0 }}>
                       @{owner?.handle ?? owner?.name ?? 'user'} · v{latestVersion?.version ?? '—'} ·
-                      {skill.reportCount ?? 0} report{(skill.reportCount ?? 0) === 1 ? '' : 's'}
+                      {skill.reportCount ?? 0} 条举报
                       {skill.lastReportedAt
-                        ? ` · last ${formatTimestamp(skill.lastReportedAt)}`
+                        ? ` · 最后于 ${formatTimestamp(skill.lastReportedAt)}`
                         : ''}
                     </div>
                     {reportEntries.length > 0 ? (
@@ -255,7 +255,7 @@ function Management() {
                       </div>
                     ) : (
                       <div className="section-subtitle" style={{ margin: 0 }}>
-                        No report reasons yet.
+                        暂无举报原因。
                       </div>
                     )}
                   </div>
@@ -267,7 +267,7 @@ function Management() {
                         void setSoftDeleted({ skillId: skill._id, deleted: !skill.softDeletedAt })
                       }
                     >
-                      {skill.softDeletedAt ? 'Restore' : 'Hide'}
+                      {skill.softDeletedAt ? '恢复' : '隐藏'}
                     </button>
                     {admin ? (
                       <button
@@ -278,7 +278,7 @@ function Management() {
                           void hardDelete({ skillId: skill._id })
                         }}
                       >
-                        Hard delete
+                        永久删除
                       </button>
                     ) : null}
                   </div>
@@ -291,23 +291,23 @@ function Management() {
 
       <div className="card" style={{ marginTop: 20 }}>
         <h2 className="section-title" style={{ fontSize: '1.2rem', margin: 0 }}>
-          Skill tools
+          技能工具
         </h2>
         {selectedSlug ? (
           <div className="section-subtitle" style={{ marginTop: 8 }}>
-            Managing "{selectedSlug}" ·{' '}
+            管理 "{selectedSlug}" ·{' '}
             <Link to="/management" search={{ skill: undefined }}>
-              Clear selection
+              清除选择
             </Link>
           </div>
         ) : null}
         <div className="management-list">
           {!selectedSlug ? (
-            <div className="stat">Use the Manage button on a skill to open tooling here.</div>
+            <div className="stat">在技能页面点击"管理"按钮打开工具。</div>
           ) : selectedSkill === undefined ? (
-            <div className="stat">Loading skill…</div>
+            <div className="stat">加载技能中…</div>
           ) : !selectedSkill?.skill ? (
-            <div className="stat">No skill found for "{selectedSlug}".</div>
+            <div className="stat">未找到技能 "{selectedSlug}"。</div>
           ) : (
             (() => {
               const { skill, latestVersion, owner, canonical } = selectedSkill
@@ -335,7 +335,7 @@ function Management() {
                     </Link>
                     <div className="section-subtitle" style={{ margin: 0 }}>
                       @{owner?.handle ?? owner?.name ?? 'user'} · v{latestVersion?.version ?? '—'} ·
-                      updated {formatTimestamp(skill.updatedAt)} · {moderationStatus}
+                      更新于 {formatTimestamp(skill.updatedAt)} · {moderationStatus}
                       {badges.length ? ` · ${badges.join(', ').toLowerCase()}` : ''}
                     </div>
                     {skill.moderationFlags?.length ? (
@@ -349,12 +349,12 @@ function Management() {
                     ) : null}
                     <div className="management-controls">
                       <label className="management-control">
-                        <span className="mono">duplicate of</span>
+                        <span className="mono">重复自</span>
                         <input
                           className="search-input"
                           value={selectedDuplicate}
                           onChange={(event) => setSelectedDuplicate(event.target.value)}
-                          placeholder={canonical?.skill?.slug ?? 'canonical slug'}
+                          placeholder={canonical?.skill?.slug ?? '原始标识'}
                         />
                       </label>
                       <button
@@ -367,11 +367,11 @@ function Management() {
                           })
                         }
                       >
-                        Set duplicate
+                        标记重复
                       </button>
                       {admin ? (
                         <label className="management-control">
-                          <span className="mono">owner</span>
+                          <span className="mono">所有者</span>
                           <select
                             value={selectedOwner}
                             onChange={(event) => setSelectedOwner(event.target.value)}
@@ -392,7 +392,7 @@ function Management() {
                               })
                             }
                           >
-                            Change owner
+                            变更所有者
                           </button>
                         </label>
                       ) : null}
@@ -404,7 +404,7 @@ function Management() {
                       to="/$owner/$slug"
                       params={{ owner: ownerParam, slug: skill.slug }}
                     >
-                      View
+                      查看
                     </Link>
                     <button
                       className="btn"
@@ -413,7 +413,7 @@ function Management() {
                         void setSoftDeleted({ skillId: skill._id, deleted: !skill.softDeletedAt })
                       }
                     >
-                      {skill.softDeletedAt ? 'Restore' : 'Hide'}
+                      {skill.softDeletedAt ? '恢复' : '隐藏'}
                     </button>
                     <button
                       className="btn"
@@ -425,7 +425,7 @@ function Management() {
                         })
                       }
                     >
-                      {isHighlighted ? 'Unhighlight' : 'Highlight'}
+                      {isHighlighted ? '取消精选' : '设为精选'}
                     </button>
                     {admin ? (
                       <button
@@ -436,7 +436,7 @@ function Management() {
                           void hardDelete({ skillId: skill._id })
                         }}
                       >
-                        Hard delete
+                        永久删除
                       </button>
                     ) : null}
                     {staff ? (
@@ -454,7 +454,7 @@ function Management() {
                           void banUser({ userId: ownerUserId, reason })
                         }}
                       >
-                        Ban user
+                        封禁用户
                       </button>
                     ) : null}
                     {admin ? (
@@ -469,7 +469,7 @@ function Management() {
                             })
                           }
                         >
-                          {isOfficial ? 'Remove official' : 'Mark official'}
+                          {isOfficial ? '取消官方' : '标记官方'}
                         </button>
                         <button
                           className="btn"
@@ -481,7 +481,7 @@ function Management() {
                             })
                           }
                         >
-                          {isDeprecated ? 'Remove deprecated' : 'Mark deprecated'}
+                          {isDeprecated ? '取消弃用' : '标记弃用'}
                         </button>
                       </>
                     ) : null}
@@ -495,11 +495,11 @@ function Management() {
 
       <div className="card" style={{ marginTop: 20 }}>
         <h2 className="section-title" style={{ fontSize: '1.2rem', margin: 0 }}>
-          Duplicate candidates
+          疑似重复
         </h2>
         <div className="management-list">
           {duplicateCandidates.length === 0 ? (
-            <div className="stat">No duplicate candidates.</div>
+            <div className="stat">暂无疑似重复项。</div>
           ) : (
             duplicateCandidates.map((entry) => (
               <div key={entry.skill._id} className="management-item">
@@ -543,7 +543,7 @@ function Management() {
                               slug: match.skill.slug,
                             }}
                           >
-                            View
+                            查看
                           </Link>
                           <button
                             className="btn"
@@ -555,7 +555,7 @@ function Management() {
                               })
                             }
                           >
-                            Mark duplicate
+                            标记重复
                           </button>
                         </div>
                       </div>
@@ -574,7 +574,7 @@ function Management() {
                       slug: entry.skill.slug,
                     }}
                   >
-                    View
+                    查看
                   </Link>
                 </div>
               </div>
@@ -585,16 +585,16 @@ function Management() {
 
       <div className="card" style={{ marginTop: 20 }}>
         <h2 className="section-title" style={{ fontSize: '1.2rem', margin: 0 }}>
-          Recent pushes
+          最近发布
         </h2>
         <div className="management-list">
           {recentVersions.length === 0 ? (
-            <div className="stat">No recent versions.</div>
+            <div className="stat">暂无最近版本。</div>
           ) : (
             recentVersions.map((entry) => (
               <div key={entry.version._id} className="management-item">
                 <div className="management-item-main">
-                  <strong>{entry.skill?.displayName ?? 'Unknown skill'}</strong>
+                  <strong>{entry.skill?.displayName ?? '未知技能'}</strong>
                   <div className="section-subtitle" style={{ margin: 0 }}>
                     v{entry.version.version} · @{entry.owner?.handle ?? entry.owner?.name ?? 'user'}
                   </div>
@@ -612,7 +612,7 @@ function Management() {
                         slug: entry.skill.slug,
                       }}
                     >
-                      View
+                      查看
                     </Link>
                   ) : null}
                 </div>
@@ -625,14 +625,14 @@ function Management() {
       {admin ? (
         <div className="card" style={{ marginTop: 20 }}>
           <h2 className="section-title" style={{ fontSize: '1.2rem', margin: 0 }}>
-            Users
+            用户
           </h2>
           <div className="management-controls">
             <div className="management-control management-search">
-              <span className="mono">Filter</span>
+              <span className="mono">筛选</span>
               <input
                 type="search"
-                placeholder="Search users"
+                placeholder="搜索用户"
                 value={userSearch}
                 onChange={(event) => setUserSearch(event.target.value)}
               />
@@ -665,9 +665,9 @@ function Management() {
                         }
                       }}
                     >
-                      <option value="user">User</option>
-                      <option value="moderator">Moderator</option>
-                      <option value="admin">Admin</option>
+                      <option value="user">用户</option>
+                      <option value="moderator">版主</option>
+                      <option value="admin">管理员</option>
                     </select>
                     <button
                       className="btn"

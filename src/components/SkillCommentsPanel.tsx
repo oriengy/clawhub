@@ -20,7 +20,7 @@ function formatReportError(error: unknown) {
       .trim()
     if (cleaned && cleaned !== 'Server Error') return cleaned
   }
-  return 'Failed to report comment'
+  return '举报评论失败'
 }
 
 export function SkillCommentsPanel({ skillId, isAuthenticated, me }: SkillCommentsPanelProps) {
@@ -48,7 +48,7 @@ export function SkillCommentsPanel({ skillId, isAuthenticated, me }: SkillCommen
       await addComment({ skillId, body })
       setComment('')
     } catch (error) {
-      setSubmitError(error instanceof Error ? error.message : 'Failed to post comment')
+      setSubmitError(error instanceof Error ? error.message : '发表评论失败')
     } finally {
       setIsSubmitting(false)
     }
@@ -61,7 +61,7 @@ export function SkillCommentsPanel({ skillId, isAuthenticated, me }: SkillCommen
     try {
       await removeComment({ commentId })
     } catch (error) {
-      setDeleteError(error instanceof Error ? error.message : 'Failed to delete comment')
+      setDeleteError(error instanceof Error ? error.message : '删除评论失败')
     } finally {
       setDeletingCommentId(null)
     }
@@ -86,7 +86,7 @@ export function SkillCommentsPanel({ skillId, isAuthenticated, me }: SkillCommen
     if (isSubmittingReport) return
     const reason = reportReason.trim()
     if (!reason) {
-      setReportError('Report reason required.')
+      setReportError('举报原因为必填项。')
       return
     }
 
@@ -96,7 +96,7 @@ export function SkillCommentsPanel({ skillId, isAuthenticated, me }: SkillCommen
     try {
       const result = await reportComment({ commentId, reason })
       setReportNotice(
-        result.alreadyReported ? 'You already reported this comment.' : 'Report submitted.',
+        result.alreadyReported ? '你已经举报过此评论。' : '举报已提交。',
       )
       closeReportForm()
     } catch (error) {
@@ -108,7 +108,7 @@ export function SkillCommentsPanel({ skillId, isAuthenticated, me }: SkillCommen
   return (
     <div className="card">
       <h2 className="section-title" style={{ fontSize: '1.2rem', margin: 0 }}>
-        Comments
+        评论
       </h2>
       {isAuthenticated ? (
         <form
@@ -123,22 +123,22 @@ export function SkillCommentsPanel({ skillId, isAuthenticated, me }: SkillCommen
             rows={4}
             value={comment}
             onChange={(event) => setComment(event.target.value)}
-            placeholder="Leave a note…"
+            placeholder="留下评论…"
             disabled={isSubmitting}
           />
           {submitError ? <div className="report-dialog-error">{submitError}</div> : null}
           <button className="btn comment-submit" type="submit" disabled={isSubmitting}>
-            {isSubmitting ? 'Posting…' : 'Post comment'}
+            {isSubmitting ? '发布中…' : '发表评论'}
           </button>
         </form>
       ) : (
-        <p className="section-subtitle">Sign in to comment.</p>
+        <p className="section-subtitle">登录后即可评论。</p>
       )}
       {deleteError ? <div className="report-dialog-error">{deleteError}</div> : null}
       {reportNotice ? <div className="stat">{reportNotice}</div> : null}
       <div style={{ display: 'grid', gap: 12, marginTop: 16 }}>
         {(comments ?? []).length === 0 ? (
-          <div className="stat">No comments yet.</div>
+          <div className="stat">暂无评论。</div>
         ) : (
           (comments ?? []).map((entry) => (
             <div key={entry.comment._id} className="comment-item">
@@ -158,7 +158,7 @@ export function SkillCommentsPanel({ skillId, isAuthenticated, me }: SkillCommen
                       rows={3}
                       value={reportReason}
                       onChange={(event) => setReportReason(event.target.value)}
-                      placeholder="Why are you reporting this comment?"
+                      placeholder="请描述举报此评论的原因"
                       disabled={isSubmittingReport}
                     />
                     <div className="comment-report-actions">
@@ -168,15 +168,15 @@ export function SkillCommentsPanel({ skillId, isAuthenticated, me }: SkillCommen
                         onClick={closeReportForm}
                         disabled={isSubmittingReport}
                       >
-                        Cancel
+                        取消
                       </button>
                       <button className="btn comment-submit" type="submit" disabled={isSubmittingReport}>
-                        {isSubmittingReport ? 'Reporting…' : 'Submit report'}
+                        {isSubmittingReport ? '提交中…' : '提交举报'}
                       </button>
                     </div>
                     {reportError ? <div className="report-dialog-error">{reportError}</div> : null}
                     <div className="stat">
-                      Reports require a reason. Abuse of reporting may result in bans.
+                      举报需要填写原因。滥用举报可能导致封号。
                     </div>
                   </form>
                 ) : null}
@@ -190,7 +190,7 @@ export function SkillCommentsPanel({ skillId, isAuthenticated, me }: SkillCommen
                       onClick={() => void deleteComment(entry.comment._id)}
                       disabled={Boolean(deletingCommentId) || isSubmitting || isSubmittingReport}
                     >
-                      {deletingCommentId === entry.comment._id ? 'Deleting…' : 'Delete'}
+                      {deletingCommentId === entry.comment._id ? '删除中…' : '删除'}
                     </button>
                   ) : null}
                   {me._id !== entry.comment.userId ? (
@@ -204,7 +204,7 @@ export function SkillCommentsPanel({ skillId, isAuthenticated, me }: SkillCommen
                         (Boolean(reportingCommentId) && reportingCommentId !== entry.comment._id)
                       }
                     >
-                      {reportingCommentId === entry.comment._id ? 'Report open' : 'Report'}
+                      {reportingCommentId === entry.comment._id ? '举报中' : '举报'}
                     </button>
                   ) : null}
                 </div>

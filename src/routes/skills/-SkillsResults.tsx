@@ -36,13 +36,13 @@ export function SkillsResults({
     <>
       {isLoadingSkills ? (
         <div className="card">
-          <div className="loading-indicator">Loading skills…</div>
+          <div className="loading-indicator">加载技能中…</div>
         </div>
       ) : sorted.length === 0 ? (
         <div className="card">
           {paginationStatus === 'Exhausted' || hasQuery
-            ? 'No skills match that filter.'
-            : 'Loading skills…'}
+            ? '没有匹配的技能。'
+            : '加载技能中…'}
         </div>
       ) : view === 'cards' ? (
         <div className="grid">
@@ -59,12 +59,12 @@ export function SkillsResults({
                 skill={skill}
                 href={skillHref}
                 badge={getSkillBadges(skill)}
-                chip={isPlugin ? 'Plugin bundle (nix)' : undefined}
+                chip={isPlugin ? '插件包 (nix)' : undefined}
                 platformLabels={platforms.length ? platforms : undefined}
-                summaryFallback="Agent-ready skill pack."
+                summaryFallback="Agent 就绪的技能包。"
                 meta={
                   <div className="skill-card-footer-rows">
-                    <UserBadge user={entry.owner} fallbackHandle={ownerHandle} prefix="by" link={false} />
+                    <UserBadge user={entry.owner} fallbackHandle={ownerHandle} prefix="作者" link={false} />
                     <div className="stat">
                       <SkillStatsTripletLine stats={skill.stats} />
                     </div>
@@ -94,14 +94,14 @@ export function SkillsResults({
                         {badge}
                       </span>
                     ))}
-                    {isPlugin ? <span className="tag tag-accent tag-compact">Plugin bundle (nix)</span> : null}
+                    {isPlugin ? <span className="tag tag-accent tag-compact">插件包 (nix)</span> : null}
                     {platforms.map((label) => (
                       <span key={label} className="tag tag-compact">{label}</span>
                     ))}
                   </div>
-                  <div className="skills-row-summary">{skill.summary ?? 'No summary provided.'}</div>
+                  <div className="skills-row-summary">{skill.summary ?? '暂无简介。'}</div>
                   <div className="skills-row-owner">
-                    <UserBadge user={entry.owner} fallbackHandle={ownerHandle} prefix="by" link={false} />
+                    <UserBadge user={entry.owner} fallbackHandle={ownerHandle} prefix="作者" link={false} />
                   </div>
                 </div>
                 <div className="skills-row-metrics">
@@ -121,13 +121,13 @@ export function SkillsResults({
         >
           {canAutoLoad ? (
             isLoadingMore ? (
-              'Loading more…'
+              '加载更多中…'
             ) : (
-              'Scroll to load more'
+              '滚动加载更多'
             )
           ) : (
             <button className="btn" type="button" onClick={loadMore} disabled={isLoadingMore}>
-              {isLoadingMore ? 'Loading…' : 'Load more'}
+              {isLoadingMore ? '加载中…' : '加载更多'}
             </button>
           )}
         </div>

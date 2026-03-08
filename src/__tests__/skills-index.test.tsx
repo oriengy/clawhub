@@ -59,7 +59,7 @@ describe('SkillsIndex', () => {
 
   it('renders an empty state when no skills are returned', () => {
     render(<SkillsIndex />)
-    expect(screen.getByText('No skills match that filter.')).toBeTruthy()
+    expect(screen.getByText('没有匹配的技能。')).toBeTruthy()
   })
 
   it('shows loading state instead of empty state when pagination is not exhausted', () => {
@@ -70,8 +70,8 @@ describe('SkillsIndex', () => {
       loadMore: vi.fn(),
     })
     render(<SkillsIndex />)
-    expect(screen.getByText('Loading skills…')).toBeTruthy()
-    expect(screen.queryByText('No skills match that filter.')).toBeNull()
+    expect(screen.getByText('加载技能中…')).toBeTruthy()
+    expect(screen.queryByText('没有匹配的技能。')).toBeNull()
   })
 
   it('keeps load-more reachable when results are empty but pagination can continue', () => {
@@ -81,7 +81,7 @@ describe('SkillsIndex', () => {
       loadMore: vi.fn(),
     })
     render(<SkillsIndex />)
-    expect(screen.getByRole('button', { name: 'Load more' })).toBeTruthy()
+    expect(screen.getByRole('button', { name: '加载更多' })).toBeTruthy()
   })
 
   it('shows loading indicator during pagination instead of hiding load more', () => {
@@ -104,7 +104,7 @@ describe('SkillsIndex', () => {
     })
     render(<SkillsIndex />)
     // The load more button should still be visible with loading state
-    expect(screen.getByText('Loading…')).toBeTruthy()
+    expect(screen.getByText('加载中…')).toBeTruthy()
   })
 
   it('handles LoadingMore with empty results gracefully', () => {
@@ -116,10 +116,10 @@ describe('SkillsIndex', () => {
     })
     render(<SkillsIndex />)
     // Should show loading message, not "No skills match"
-    expect(screen.getByText('Loading skills…')).toBeTruthy()
-    expect(screen.queryByText('No skills match that filter.')).toBeNull()
+    expect(screen.getByText('加载技能中…')).toBeTruthy()
+    expect(screen.queryByText('没有匹配的技能。')).toBeNull()
     // Keep the pagination control mounted so loading can continue.
-    expect(screen.getByText('Loading…')).toBeTruthy()
+    expect(screen.getByText('加载中…')).toBeTruthy()
   })
 
   it('shows empty state immediately when search returns no results', async () => {
@@ -142,8 +142,8 @@ describe('SkillsIndex', () => {
     })
 
     // Should show empty state, not loading
-    expect(screen.getByText('No skills match that filter.')).toBeTruthy()
-    expect(screen.queryByText('Loading skills…')).toBeNull()
+    expect(screen.getByText('没有匹配的技能。')).toBeTruthy()
+    expect(screen.queryByText('加载技能中…')).toBeNull()
   })
 
   it('skips list query and calls search when query is set', async () => {
@@ -193,7 +193,7 @@ describe('SkillsIndex', () => {
       await vi.runAllTimersAsync()
     })
 
-    const loadMoreButton = screen.getByRole('button', { name: 'Load more' })
+    const loadMoreButton = screen.getByRole('button', { name: '加载更多' })
     await act(async () => {
       fireEvent.click(loadMoreButton)
       await vi.runAllTimersAsync()

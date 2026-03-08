@@ -42,7 +42,7 @@ export function SkillsToolbar({
           className="skills-search-input"
           value={query}
           onChange={(event) => onQueryChange(event.target.value)}
-          placeholder="Filter by name, slug, or summary…"
+          placeholder="按名称、标识或简介筛选…"
         />
       </div>
       <div className="skills-toolbar-row">
@@ -52,7 +52,7 @@ export function SkillsToolbar({
           aria-pressed={highlightedOnly}
           onClick={onToggleHighlighted}
         >
-          Highlighted
+          精选
         </button>
         <button
           className={`search-filter-button${nonSuspiciousOnly ? ' is-active' : ''}`}
@@ -60,23 +60,23 @@ export function SkillsToolbar({
           aria-pressed={nonSuspiciousOnly}
           onClick={onToggleNonSuspicious}
         >
-          Hide suspicious
+          隐藏可疑
         </button>
         <select
           className="skills-sort"
           value={sort}
           onChange={(event) => onSortChange(event.target.value)}
-          aria-label="Sort skills"
+          aria-label="排序技能"
         >
-          {hasQuery ? <option value="relevance">Relevance</option> : null}
-          <option value="newest">Newest</option>
-          <option value="updated">Recently updated</option>
-          <option value="downloads">Downloads</option>
-          <option value="installs">Installs</option>
-          <option value="stars">Stars</option>
-          <option value="name">Name</option>
+          {hasQuery ? <option value="relevance">相关度</option> : null}
+          <option value="newest">最新</option>
+          <option value="updated">最近更新</option>
+          <option value="downloads">下载量</option>
+          <option value="installs">安装量</option>
+          <option value="stars">收藏数</option>
+          <option value="name">名称</option>
         </select>
-        <button className="skills-dir" type="button" aria-label={`Sort direction ${dir}`} onClick={onToggleDir}>
+        <button className="skills-dir" type="button" aria-label={`排序方向 ${dir}`} onClick={onToggleDir}>
           {dir === 'asc' ? '↑' : '↓'}
         </button>
         <button
@@ -84,7 +84,7 @@ export function SkillsToolbar({
           type="button"
           onClick={onToggleView}
         >
-          {view === 'cards' ? 'List' : 'Cards'}
+          {view === 'cards' ? '列表' : '卡片'}
         </button>
       </div>
     </div>

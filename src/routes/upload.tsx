@@ -130,7 +130,7 @@ export function Upload() {
     ).slice(0, 3)
     const suffix = ignoredMacJunkPaths.length > 3 ? ', ...' : ''
     const count = ignoredMacJunkPaths.length
-    return `Ignored ${count} macOS junk file${count === 1 ? '' : 's'} (${labels.join(', ')}${suffix})`
+    return `已忽略 ${count} 个 macOS 垃圾文件（${labels.join(', ')}${suffix}）`
   }, [ignoredMacJunkPaths])
   const trimmedSlug = slug.trim()
   const trimmedName = displayName.trim()
@@ -235,39 +235,39 @@ export function Upload() {
   const validation = useMemo(() => {
     const issues: string[] = []
     if (!trimmedSlug) {
-      issues.push('Slug is required.')
+      issues.push('标识（Slug）为必填项。')
     } else if (!SLUG_PATTERN.test(trimmedSlug)) {
-      issues.push('Slug must be lowercase and use dashes only.')
+      issues.push('标识只能使用小写字母和短横线。')
     }
     if (!trimmedName) {
-      issues.push('Display name is required.')
+      issues.push('显示名称为必填项。')
     }
     if (!semver.valid(version)) {
-      issues.push('Version must be valid semver (e.g. 1.0.0).')
+      issues.push('版本号必须是有效的 semver 格式（如 1.0.0）。')
     }
     if (parsedTags.length === 0) {
-      issues.push('At least one tag is required.')
+      issues.push('至少需要一个标签。')
     }
     if (!isSoulMode && !acceptedLicenseTerms) {
-      issues.push('Accept the MIT-0 license terms to publish this skill.')
+      issues.push('请接受 MIT-0 许可条款以发布此技能。')
     }
     if (files.length === 0) {
-      issues.push('Add at least one file.')
+      issues.push('请至少添加一个文件。')
     }
     if (!hasRequiredFile) {
-      issues.push(`${requiredFileLabel} is required.`)
+      issues.push(`需要 ${requiredFileLabel} 文件。`)
     }
     const invalidFiles = files.filter((file) => !isTextFile(file))
     if (invalidFiles.length > 0) {
       issues.push(
-        `Remove non-text files: ${invalidFiles
+        `请移除非文本文件：${invalidFiles
           .slice(0, 3)
           .map((file) => file.name)
           .join(', ')}`,
       )
     }
     if (totalBytes > maxBytes) {
-      issues.push('Total file size exceeds 50MB.')
+      issues.push('文件总大小超过 50MB。')
     }
     if (slugCollision) {
       issues.push(slugCollision.message)
@@ -296,7 +296,7 @@ export function Upload() {
   if (!isAuthenticated) {
     return (
       <main className="section">
-        <div className="card">Sign in to upload a {contentLabel}.</div>
+        <div className="card">请登录以发布{contentLabel === 'soul' ? '灵魂' : '技能'}。</div>
       </main>
     )
   }
@@ -321,19 +321,19 @@ export function Upload() {
       return
     }
     if (!isSoulMode && !acceptedLicenseTerms) {
-      setError('Accept the MIT-0 license terms to publish this skill.')
+      setError('请接受 MIT-0 许可条款以发布此技能。')
       return
     }
     setError(null)
     if (totalBytes > maxBytes) {
-      setError('Total size exceeds 50MB per version.')
+      setError('单版本文件总大小超过 50MB。')
       return
     }
     if (!hasRequiredFile) {
-      setError(`${requiredFileLabel} is required.`)
+      setError(`需要 ${requiredFileLabel} 文件。`)
       return
     }
-    setStatus('Uploading files…')
+    setStatus('上传文件中…')
 
     const uploaded = [] as Array<{
       path: string
@@ -361,7 +361,7 @@ export function Upload() {
       })
     }
 
-    setStatus('Publishing…')
+    setStatus('发布中…')
     try {
       const result = await publishVersion({
         slug: trimmedSlug,
@@ -393,9 +393,9 @@ export function Upload() {
     <main className="section upload-page">
       <header className="upload-page-header">
         <div>
-          <h1 className="upload-page-title">Publish a {contentLabel}</h1>
+          <h1 className="upload-page-title">发布{contentLabel === 'soul' ? '灵魂' : '技能'}</h1>
           <p className="upload-page-subtitle">
-            Drop a folder with {requiredFileLabel} and text files. We will handle the rest.
+            拖入包含 {requiredFileLabel} 和文本文件的文件夹，其余交给我们。
           </p>
         </div>
       </header>
@@ -403,7 +403,7 @@ export function Upload() {
       <form onSubmit={handleSubmit} className="upload-grid">
         <div className="card upload-panel">
           <label className="form-label" htmlFor="slug">
-            Slug
+            标识（Slug）
           </label>
           <input
             className="form-input"
@@ -414,18 +414,18 @@ export function Upload() {
           />
 
           <label className="form-label" htmlFor="displayName">
-            Display name
+            显示名称
           </label>
           <input
             className="form-input"
             id="displayName"
             value={displayName}
             onChange={(event) => setDisplayName(event.target.value)}
-            placeholder={`My ${contentLabel}`}
+            placeholder={`我的${contentLabel === 'soul' ? '灵魂' : '技能'}`}
           />
 
           <label className="form-label" htmlFor="version">
-            Version
+            版本
           </label>
           <input
             className="form-input"
@@ -436,7 +436,7 @@ export function Upload() {
           />
 
           <label className="form-label" htmlFor="tags">
-            Tags
+            标签
           </label>
           <input
             className="form-input"
@@ -481,27 +481,27 @@ export function Upload() {
             />
             <div className="upload-dropzone-copy">
               <div className="upload-dropzone-title-row">
-                <strong>Drop a folder</strong>
+                <strong>拖入文件夹</strong>
                 <span className="upload-dropzone-count">
-                  {files.length} files · {sizeLabel}
+                  {files.length} 个文件 · {sizeLabel}
                 </span>
               </div>
               <span className="upload-dropzone-hint">
-                We keep folder paths and flatten the outer wrapper automatically.
+                我们会保留文件夹路径并自动展平外层包装。
               </span>
               <button
                 className="btn upload-picker-btn"
                 type="button"
                 onClick={() => fileInputRef.current?.click()}
               >
-                Choose folder
+                选择文件夹
               </button>
             </div>
           </label>
 
           <div className="upload-file-list">
             {files.length === 0 ? (
-              <div className="stat">No files selected.</div>
+              <div className="stat">未选择文件。</div>
             ) : (
               normalizedPaths.map((path) => (
                 <div key={path} className="upload-file-row">
@@ -514,9 +514,9 @@ export function Upload() {
         </div>
 
         <div className="card upload-panel" ref={validationRef}>
-          <h2 className="upload-panel-title">Validation</h2>
+          <h2 className="upload-panel-title">验证</h2>
           {validation.issues.length === 0 ? (
-            <div className="stat">All checks passed.</div>
+            <div className="stat">全部检查通过。</div>
           ) : (
             <ul className="validation-list">
               {validation.issues.map((issue) => (
@@ -526,7 +526,7 @@ export function Upload() {
           )}
           {slugCollision?.url ? (
             <div className="stat">
-              Existing skill:{' '}
+              已存在的技能：{' '}
               <a href={slugCollision.url} className="upload-link">
                 {slugCollision.url}
               </a>
@@ -537,13 +537,13 @@ export function Upload() {
         <div className="card upload-panel">
           {!isSoulMode ? (
             <>
-              <h2 className="upload-panel-title">License</h2>
+              <h2 className="upload-panel-title">许可证</h2>
               <div className="upload-license-card">
                 <div className="upload-license-pill">
                   {PLATFORM_SKILL_LICENSE} · {PLATFORM_SKILL_LICENSE_NAME}
                 </div>
                 <p className="upload-license-copy">
-                  All skills published on ClawHub are licensed under {PLATFORM_SKILL_LICENSE}.{' '}
+                  在 ClawHub 上发布的所有技能均采用 {PLATFORM_SKILL_LICENSE} 许可。{' '}
                   {PLATFORM_SKILL_LICENSE_SUMMARY}
                 </p>
                 <label className="upload-license-check">
@@ -553,15 +553,14 @@ export function Upload() {
                     onChange={(event) => setAcceptedLicenseTerms(event.target.checked)}
                   />
                   <span>
-                    I have the rights to this skill and agree to publish it under{' '}
-                    {PLATFORM_SKILL_LICENSE}.
+                    我拥有此技能的权利，并同意以 {PLATFORM_SKILL_LICENSE} 许可发布。
                   </span>
                 </label>
               </div>
             </>
           ) : null}
           <label className="form-label" htmlFor="changelog">
-            Changelog
+            更新日志
           </label>
           <textarea
             className="form-input"
@@ -573,14 +572,14 @@ export function Upload() {
               setChangelogSource('user')
               setChangelog(event.target.value)
             }}
-            placeholder={`Describe what changed in this ${contentLabel}...`}
+            placeholder={`描述此${contentLabel === 'soul' ? '灵魂' : '技能'}的变更内容...`}
           />
-          {changelogStatus === 'loading' ? <div className="stat">Generating changelog…</div> : null}
+          {changelogStatus === 'loading' ? <div className="stat">生成更新日志中…</div> : null}
           {changelogStatus === 'error' ? (
-            <div className="stat">Could not auto-generate changelog.</div>
+            <div className="stat">无法自动生成更新日志。</div>
           ) : null}
           {changelogSource === 'auto' && changelog ? (
-            <div className="stat">Auto-generated changelog (edit as needed).</div>
+            <div className="stat">自动生成的更新日志（可按需编辑）。</div>
           ) : null}
         </div>
 
@@ -593,7 +592,7 @@ export function Upload() {
             ) : null}
             {status ? <div className="stat">{status}</div> : null}
             {hasAttempted && !validation.ready ? (
-              <div className="stat">Fix validation issues to continue.</div>
+              <div className="stat">请修复验证问题后继续。</div>
             ) : null}
           </div>
           <button
@@ -601,7 +600,7 @@ export function Upload() {
             type="submit"
             disabled={!validation.ready || isSubmitting}
           >
-            Publish {contentLabel}
+            发布{contentLabel === 'soul' ? '灵魂' : '技能'}
           </button>
         </div>
       </form>

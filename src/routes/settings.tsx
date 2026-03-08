@@ -40,7 +40,7 @@ function Settings() {
   if (!me) {
     return (
       <main className="section">
-        <div className="card">Sign in to access settings.</div>
+        <div className="card">请登录以访问设置。</div>
       </main>
     )
   }
@@ -52,13 +52,13 @@ function Settings() {
   async function onSave(event: React.FormEvent) {
     event.preventDefault()
     await updateProfile({ displayName, bio })
-    setStatus('Saved.')
+    setStatus('已保存。')
   }
 
   async function onDelete() {
     const ok = window.confirm(
-      'Delete your account permanently? This cannot be undone.\n\n' +
-        'Published skills will remain public.',
+      '确定要永久删除账号吗？此操作不可撤销。\n\n' +
+        '已发布的技能将继续公开。',
     )
     if (!ok) return
     await deleteAccount()
@@ -72,7 +72,7 @@ function Settings() {
 
   return (
     <main className="section settings-shell">
-      <h1 className="section-title">Settings</h1>
+      <h1 className="section-title">设置</h1>
       <div className="card settings-profile">
         <div className="settings-avatar">
           {avatar ? (
@@ -89,7 +89,7 @@ function Settings() {
       </div>
       <form className="card settings-card" onSubmit={onSave}>
         <label className="settings-field">
-          <span>Display name</span>
+          <span>显示名称</span>
           <input
             className="settings-input"
             value={displayName}
@@ -97,18 +97,18 @@ function Settings() {
           />
         </label>
         <label className="settings-field">
-          <span>Bio</span>
+          <span>简介</span>
           <textarea
             className="settings-input"
             rows={5}
             value={bio}
             onChange={(event) => setBio(event.target.value)}
-            placeholder="Tell people what you're building."
+            placeholder="介绍一下你正在做的事情。"
           />
         </label>
         <div className="settings-actions">
           <button className="btn btn-primary settings-save" type="submit">
-            Save
+            保存
           </button>
           {status ? <div className="stat">{status}</div> : null}
         </div>
@@ -116,14 +116,14 @@ function Settings() {
 
       <div className="card settings-card">
         <h2 className="section-title danger-title" style={{ marginTop: 0 }}>
-          API tokens
+          API Token
         </h2>
         <p className="section-subtitle">
-          Use these tokens for the `clawhub` CLI. Tokens are shown once on creation.
+          用于 `clawhub` CLI 的令牌。令牌仅在创建时显示一次。
         </p>
 
         <div className="settings-field">
-          <span>Label</span>
+          <span>标签</span>
           <input
             className="settings-input"
             value={tokenLabel}
@@ -137,11 +137,11 @@ function Settings() {
             type="button"
             onClick={() => void onCreateToken()}
           >
-            Create token
+            创建令牌
           </button>
           {newToken ? (
             <div className="stat" style={{ overflowX: 'auto' }}>
-              <div style={{ marginBottom: 8 }}>Copy this token now:</div>
+              <div style={{ marginBottom: 8 }}>请立即复制此令牌：</div>
               <code>{newToken}</code>
             </div>
           ) : null}
@@ -161,9 +161,9 @@ function Settings() {
                     <span style={{ opacity: 0.7 }}>({token.prefix}…)</span>
                   </div>
                   <div style={{ opacity: 0.7 }}>
-                    Created {formatDate(token.createdAt)}
-                    {token.lastUsedAt ? ` · Used ${formatDate(token.lastUsedAt)}` : ''}
-                    {token.revokedAt ? ` · Revoked ${formatDate(token.revokedAt)}` : ''}
+                    创建于 {formatDate(token.createdAt)}
+                    {token.lastUsedAt ? ` · 使用于 ${formatDate(token.lastUsedAt)}` : ''}
+                    {token.revokedAt ? ` · 已撤销 ${formatDate(token.revokedAt)}` : ''}
                   </div>
                 </div>
                 <div>
@@ -173,7 +173,7 @@ function Settings() {
                     disabled={Boolean(token.revokedAt)}
                     onClick={() => void revokeToken({ tokenId: token._id })}
                   >
-                    {token.revokedAt ? 'Revoked' : 'Revoke'}
+                    {token.revokedAt ? '已撤销' : '撤销'}
                   </button>
                 </div>
               </div>
@@ -181,18 +181,18 @@ function Settings() {
           </div>
         ) : (
           <p className="section-subtitle" style={{ marginTop: 16 }}>
-            No tokens yet.
+            暂无令牌。
           </p>
         )}
       </div>
 
       <div className="card danger-card">
-        <h2 className="section-title danger-title">Danger zone</h2>
+        <h2 className="section-title danger-title">危险操作</h2>
         <p className="section-subtitle">
-          Delete your account permanently. This cannot be undone. Published skills remain public.
+          永久删除你的账号。此操作不可撤销。已发布的技能将继续公开。
         </p>
         <button className="btn btn-danger" type="button" onClick={() => void onDelete()}>
-          Delete account
+          删除账号
         </button>
       </div>
     </main>

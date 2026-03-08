@@ -41,7 +41,7 @@ export function SkillInstallCard({ clawdis, osLabels }: SkillInstallCardProps) {
       <div className="skill-hero-panels">
         <div className="skill-panel">
           <h3 className="section-title" style={{ fontSize: '1rem', margin: 0 }}>
-            License
+            许可证
           </h3>
           <div className="skill-panel-body">
             <div className="tag tag-accent">{PLATFORM_SKILL_LICENSE}</div>
@@ -49,7 +49,7 @@ export function SkillInstallCard({ clawdis, osLabels }: SkillInstallCardProps) {
               <span>{PLATFORM_SKILL_LICENSE_SUMMARY}</span>
             </div>
             <div className="stat">
-              <strong>Terms</strong>
+              <strong>条款</strong>
               <a href={PLATFORM_SKILL_LICENSE_URL} target="_blank" rel="noopener noreferrer">
                 {PLATFORM_SKILL_LICENSE_URL}
               </a>
@@ -59,7 +59,7 @@ export function SkillInstallCard({ clawdis, osLabels }: SkillInstallCardProps) {
         {hasRuntimeRequirements ? (
           <div className="skill-panel">
             <h3 className="section-title" style={{ fontSize: '1rem', margin: 0 }}>
-              Runtime requirements
+              运行环境要求
             </h3>
             <div className="skill-panel-body">
               {clawdis?.emoji ? <div className="tag">{clawdis.emoji} Clawdis</div> : null}
@@ -71,45 +71,45 @@ export function SkillInstallCard({ clawdis, osLabels }: SkillInstallCardProps) {
               ) : null}
               {requirements?.bins?.length ? (
                 <div className="stat">
-                  <strong>Bins</strong>
+                  <strong>可执行文件</strong>
                   <span>{requirements.bins.join(', ')}</span>
                 </div>
               ) : null}
               {requirements?.anyBins?.length ? (
                 <div className="stat">
-                  <strong>Any bin</strong>
+                  <strong>任一可执行文件</strong>
                   <span>{requirements.anyBins.join(', ')}</span>
                 </div>
               ) : null}
               {requirements?.env?.length ? (
                 <div className="stat">
-                  <strong>Env</strong>
+                  <strong>环境变量</strong>
                   <span>{requirements.env.join(', ')}</span>
                 </div>
               ) : null}
               {requirements?.config?.length ? (
                 <div className="stat">
-                  <strong>Config</strong>
+                  <strong>配置</strong>
                   <span>{requirements.config.join(', ')}</span>
                 </div>
               ) : null}
               {clawdis?.primaryEnv ? (
                 <div className="stat">
-                  <strong>Primary env</strong>
+                  <strong>主要环境</strong>
                   <span>{clawdis.primaryEnv}</span>
                 </div>
               ) : null}
               {envVars.length > 0 ? (
                 <div className="stat">
-                  <strong>Environment variables</strong>
+                  <strong>环境变量</strong>
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem', marginTop: '0.25rem' }}>
                     {envVars.map((env, index) => (
                       <div key={`${env.name}-${index}`} style={{ display: 'flex', alignItems: 'baseline', gap: '0.5rem' }}>
                         <code style={{ fontSize: '0.85rem' }}>{env.name}</code>
                         {env.required === false ? (
-                          <span style={{ color: 'var(--ink-soft)', fontSize: '0.75rem' }}>optional</span>
+                          <span style={{ color: 'var(--ink-soft)', fontSize: '0.75rem' }}>可选</span>
                         ) : env.required === true ? (
-                          <span style={{ color: 'var(--ink-accent)', fontSize: '0.75rem' }}>required</span>
+                          <span style={{ color: 'var(--ink-accent)', fontSize: '0.75rem' }}>必需</span>
                         ) : null}
                         {env.description ? (
                           <span style={{ color: 'var(--ink-soft)', fontSize: '0.8rem' }}>— {env.description}</span>
@@ -125,7 +125,7 @@ export function SkillInstallCard({ clawdis, osLabels }: SkillInstallCardProps) {
         {hasDependencies ? (
           <div className="skill-panel">
             <h3 className="section-title" style={{ fontSize: '1rem', margin: 0 }}>
-              Dependencies
+              依赖项
             </h3>
             <div className="skill-panel-body">
               {dependencies.map((dep, index) => (
@@ -142,7 +142,7 @@ export function SkillInstallCard({ clawdis, osLabels }: SkillInstallCardProps) {
                     ) : null}
                     {dep.repository && dep.repository !== dep.url ? (
                       <div style={{ fontSize: '0.8rem' }}>
-                        <a href={dep.repository} target="_blank" rel="noopener noreferrer">Source</a>
+                        <a href={dep.repository} target="_blank" rel="noopener noreferrer">源码</a>
                       </div>
                     ) : null}
                   </div>
@@ -154,7 +154,7 @@ export function SkillInstallCard({ clawdis, osLabels }: SkillInstallCardProps) {
         {hasInstallSpecs ? (
           <div className="skill-panel">
             <h3 className="section-title" style={{ fontSize: '1rem', margin: 0 }}>
-              Install
+              安装
             </h3>
             <div className="skill-panel-body">
               {installSpecs.map((spec, index) => {
@@ -179,24 +179,24 @@ export function SkillInstallCard({ clawdis, osLabels }: SkillInstallCardProps) {
         {hasLinks ? (
           <div className="skill-panel">
             <h3 className="section-title" style={{ fontSize: '1rem', margin: 0 }}>
-              Links
+              链接
             </h3>
             <div className="skill-panel-body">
               {links?.homepage ? (
                 <div className="stat">
-                  <strong>Homepage</strong>
+                  <strong>主页</strong>
                   <a href={links.homepage} target="_blank" rel="noopener noreferrer">{links.homepage}</a>
                 </div>
               ) : null}
               {links?.repository ? (
                 <div className="stat">
-                  <strong>Repository</strong>
+                  <strong>仓库</strong>
                   <a href={links.repository} target="_blank" rel="noopener noreferrer">{links.repository}</a>
                 </div>
               ) : null}
               {links?.documentation ? (
                 <div className="stat">
-                  <strong>Docs</strong>
+                  <strong>文档</strong>
                   <a href={links.documentation} target="_blank" rel="noopener noreferrer">{links.documentation}</a>
                 </div>
               ) : null}

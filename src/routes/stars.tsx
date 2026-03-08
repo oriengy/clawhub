@@ -21,18 +21,18 @@ function Stars() {
   if (!me) {
     return (
       <main className="section">
-        <div className="card">Sign in to see your highlights.</div>
+        <div className="card">请登录以查看你的收藏。</div>
       </main>
     )
   }
 
   return (
     <main className="section">
-      <h1 className="section-title">Your highlights</h1>
-      <p className="section-subtitle">Skills you’ve starred for quick access.</p>
+      <h1 className="section-title">我的收藏</h1>
+      <p className="section-subtitle">你收藏的技能，方便快速访问。</p>
       <div className="grid">
         {skills.length === 0 ? (
-          <div className="card">No stars yet.</div>
+          <div className="card">暂无收藏。</div>
         ) : (
           skills.map((skill) => {
             const owner = encodeURIComponent(String(skill.ownerUserId))
@@ -51,7 +51,7 @@ function Stars() {
                         await toggleStar({ skillId: skill._id })
                       } catch (error) {
                         console.error('Failed to unstar skill:', error)
-                        window.alert('Unable to unstar this skill. Please try again.')
+                        window.alert('无法取消收藏此技能。请重试。')
                       }
                     }}
                     aria-label={`Unstar ${skill.displayName}`}

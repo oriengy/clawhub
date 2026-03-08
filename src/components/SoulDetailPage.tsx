@@ -75,7 +75,7 @@ export function SoulDetailPage({ slug }: SoulDetailPageProps) {
       })
       .catch((error) => {
         if (cancelled) return
-        setReadmeError(error instanceof Error ? error.message : 'Failed to load SOUL.md')
+        setReadmeError(error instanceof Error ? error.message : '加载 SOUL.md 失败')
         setReadme(null)
       })
     return () => {
@@ -87,7 +87,7 @@ export function SoulDetailPage({ slug }: SoulDetailPageProps) {
     return (
       <main className="section">
         <div className="card">
-          <div className="loading-indicator">Loading soul…</div>
+          <div className="loading-indicator">加载灵魂中…</div>
         </div>
       </main>
     )
@@ -96,7 +96,7 @@ export function SoulDetailPage({ slug }: SoulDetailPageProps) {
   if (result === null || !soul) {
     return (
       <main className="section">
-        <div className="card">Soul not found.</div>
+        <div className="card">灵魂未找到。</div>
       </main>
     )
   }
@@ -113,7 +113,7 @@ export function SoulDetailPage({ slug }: SoulDetailPageProps) {
               <h1 className="section-title" style={{ margin: 0 }}>
                 {soul.displayName}
               </h1>
-              <p className="section-subtitle">{soul.summary ?? 'No summary provided.'}</p>
+              <p className="section-subtitle">{soul.summary ?? '暂无简介。'}</p>
               <div className="stat">
                 <SoulStatsTripletLine stats={soul.stats} versionSuffix="versions" />
               </div>
@@ -128,7 +128,7 @@ export function SoulDetailPage({ slug }: SoulDetailPageProps) {
                     className={`star-toggle${isStarred ? ' is-active' : ''}`}
                     type="button"
                     onClick={() => void toggleStar({ soulId: soul._id })}
-                    aria-label={isStarred ? 'Unstar soul' : 'Star soul'}
+                    aria-label={isStarred ? '取消收藏灵魂' : '收藏灵魂'}
                   >
                     <span aria-hidden="true">★</span>
                   </button>
@@ -137,7 +137,7 @@ export function SoulDetailPage({ slug }: SoulDetailPageProps) {
             </div>
             <div className="skill-hero-cta">
               <div className="skill-version-pill">
-                <span className="skill-version-label">Current version</span>
+                <span className="skill-version-label">当前版本</span>
                 <strong>v{latestVersion?.version ?? '—'}</strong>
               </div>
               <a
@@ -145,7 +145,7 @@ export function SoulDetailPage({ slug }: SoulDetailPageProps) {
                 href={`${downloadBase}?path=SOUL.md`}
                 aria-label="Download SOUL.md"
               >
-                Download SOUL.md
+                下载 SOUL.md
               </a>
             </div>
           </div>
@@ -156,16 +156,16 @@ export function SoulDetailPage({ slug }: SoulDetailPageProps) {
             {readmeContent ? (
               <ReactMarkdown remarkPlugins={[remarkGfm]}>{readmeContent}</ReactMarkdown>
             ) : readmeError ? (
-              <div className="stat">Failed to load SOUL.md: {readmeError}</div>
+              <div className="stat">加载 SOUL.md 失败：{readmeError}</div>
             ) : (
-              <div className="loading-indicator">Loading SOUL.md…</div>
+              <div className="loading-indicator">加载 SOUL.md…</div>
             )}
           </div>
         </div>
 
         <div className="card">
           <h2 className="section-title" style={{ fontSize: '1.2rem', marginBottom: 8 }}>
-            Versions
+            版本
           </h2>
           <div className="version-scroll">
             <div className="version-list">
@@ -200,7 +200,7 @@ export function SoulDetailPage({ slug }: SoulDetailPageProps) {
 
         <div className="card">
           <h2 className="section-title" style={{ fontSize: '1.2rem', margin: 0 }}>
-            Comments
+            评论
           </h2>
           {isAuthenticated ? (
             <form
@@ -218,18 +218,18 @@ export function SoulDetailPage({ slug }: SoulDetailPageProps) {
                 rows={4}
                 value={comment}
                 onChange={(event) => setComment(event.target.value)}
-                placeholder="Leave a note…"
+                placeholder="留下评论…"
               />
               <button className="btn comment-submit" type="submit">
-                Post comment
+                发表评论
               </button>
             </form>
           ) : (
-            <p className="section-subtitle">Sign in to comment.</p>
+            <p className="section-subtitle">登录后即可评论。</p>
           )}
           <div style={{ display: 'grid', gap: 12, marginTop: 16 }}>
             {(comments ?? []).length === 0 ? (
-              <div className="stat">No comments yet.</div>
+              <div className="stat">暂无评论。</div>
             ) : (
               (comments ?? []).map((entry) => (
                 <div key={entry.comment._id} className="comment-item">
@@ -243,7 +243,7 @@ export function SoulDetailPage({ slug }: SoulDetailPageProps) {
                       type="button"
                       onClick={() => void removeComment({ commentId: entry.comment._id })}
                     >
-                      Delete
+                      删除
                     </button>
                   ) : null}
                 </div>

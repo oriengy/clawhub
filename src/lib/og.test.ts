@@ -49,7 +49,7 @@ describe('og helpers', () => {
   it('uses defaults when owner and summary are missing', () => {
     const meta = buildSkillMeta({ slug: 'parser' })
     expect(meta.title).toBe('parser — ClawHub')
-    expect(meta.description).toMatch(/ClawHub — a fast skill registry/i)
+    expect(meta.description).toMatch(/ClawHub/)
     expect(meta.url).toContain('/unknown/parser')
     expect(meta.owner).toBeNull()
     expect(meta.image).toContain('slug=parser')
@@ -58,7 +58,7 @@ describe('og helpers', () => {
   it('uses soul defaults when owner and summary are missing', () => {
     const meta = buildSoulMeta({ slug: 'signal' })
     expect(meta.title).toBe('signal — SoulHub')
-    expect(meta.description).toMatch(/SoulHub — the home for SOUL.md/i)
+    expect(meta.description).toMatch(/SoulHub/)
     expect(meta.url).toContain('/souls/signal')
     expect(meta.owner).toBeNull()
     expect(meta.image).toContain('slug=signal')
