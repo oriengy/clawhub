@@ -1,13 +1,9 @@
-import { useAuthActions } from '@convex-dev/auth/react'
 import { Link } from '@tanstack/react-router'
 import { Menu, Monitor, Moon, Sun } from 'lucide-react'
 import { useMemo, useRef } from 'react'
-import { gravatarUrl } from '../lib/gravatar'
-import { isModerator } from '../lib/roles'
 import { getClawHubSiteUrl, getSiteMode, getSiteName } from '../lib/site'
 import { applyTheme, useThemeMode } from '../lib/theme'
 import { startThemeTransition } from '../lib/theme-transition'
-import { useAuthStatus } from '../lib/useAuthStatus'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -17,21 +13,14 @@ import {
 } from './ui/dropdown-menu'
 import { ToggleGroup, ToggleGroupItem } from './ui/toggle-group'
 
+// 中国部署版：移除所有登录相关UI，仅保留匿名浏览功能
 export default function Header() {
-  const { isAuthenticated, isLoading, me } = useAuthStatus()
-  const { signIn, signOut } = useAuthActions()
   const { mode, setMode } = useThemeMode()
   const toggleRef = useRef<HTMLDivElement | null>(null)
   const siteMode = getSiteMode()
   const siteName = useMemo(() => getSiteName(siteMode), [siteMode])
   const isSoulMode = siteMode === 'souls'
   const clawHubUrl = getClawHubSiteUrl()
-
-  const avatar = me?.image ?? (me?.email ? gravatarUrl(me.email) : undefined)
-  const handle = me?.handle ?? me?.displayName ?? 'user'
-  const initial = (me?.displayName ?? me?.name ?? handle).charAt(0).toUpperCase()
-  const isStaff = isModerator(me)
-  const signInRedirectTo = getCurrentRelativeUrl()
 
   const setTheme = (next: 'system' | 'light' | 'dark') => {
     startThemeTransition({
@@ -90,10 +79,6 @@ export default function Header() {
               Skills
             </Link>
           )}
-          <Link to="/upload" search={{ updateSlug: undefined }}>
-            Upload
-          </Link>
-          {isSoulMode ? null : <Link to="/import">Import</Link>}
           <Link
             to={isSoulMode ? '/souls' : '/skills'}
             search={
@@ -118,12 +103,6 @@ export default function Header() {
           >
             Search
           </Link>
-          {me ? <Link to="/stars">Stars</Link> : null}
-          {isStaff ? (
-            <Link to="/management" search={{ skill: undefined }}>
-              Management
-            </Link>
-          ) : null}
         </nav>
         <div className="nav-actions">
           <div className="nav-mobile">
@@ -171,16 +150,6 @@ export default function Header() {
                   )}
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
-                  <Link to="/upload" search={{ updateSlug: undefined }}>
-                    Upload
-                  </Link>
-                </DropdownMenuItem>
-                {isSoulMode ? null : (
-                  <DropdownMenuItem asChild>
-                    <Link to="/import">Import</Link>
-                  </DropdownMenuItem>
-                )}
-                <DropdownMenuItem asChild>
                   <Link
                     to={isSoulMode ? '/souls' : '/skills'}
                     search={
@@ -206,18 +175,6 @@ export default function Header() {
                     Search
                   </Link>
                 </DropdownMenuItem>
-                {me ? (
-                  <DropdownMenuItem asChild>
-                    <Link to="/stars">Stars</Link>
-                  </DropdownMenuItem>
-                ) : null}
-                {isStaff ? (
-                  <DropdownMenuItem asChild>
-                    <Link to="/management" search={{ skill: undefined }}>
-                      Management
-                    </Link>
-                  </DropdownMenuItem>
-                ) : null}
                 <DropdownMenuSeparator />
                 <DropdownMenuItem onClick={() => setTheme('system')}>
                   <Monitor className="h-4 w-4" aria-hidden="true" />
@@ -258,53 +215,9 @@ export default function Header() {
               </ToggleGroupItem>
             </ToggleGroup>
           </div>
-          {isAuthenticated && me ? (
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <button className="user-trigger" type="button">
-                  {avatar ? (
-                    <img src={avatar} alt={me.displayName ?? me.name ?? 'User avatar'} />
-                  ) : (
-                    <span className="user-menu-fallback">{initial}</span>
-                  )}
-                  <span className="mono">@{handle}</span>
-                  <span className="user-menu-chevron">▾</span>
-                </button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                <DropdownMenuItem asChild>
-                  <Link to="/dashboard">Dashboard</Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem asChild>
-                  <Link to="/settings">Settings</Link>
-                </DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem onClick={() => void signOut()}>Sign out</DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          ) : (
-            <button
-              className="btn btn-primary"
-              type="button"
-              disabled={isLoading}
-              onClick={() =>
-                void signIn(
-                  'github',
-                  signInRedirectTo ? { redirectTo: signInRedirectTo } : undefined,
-                )
-              }
-            >
-              <span className="sign-in-label">Sign in</span>
-              <span className="sign-in-provider">with GitHub</span>
-            </button>
-          )}
+          {/* 中国部署版：移除登录按钮和用户菜单 */}
         </div>
       </div>
     </header>
   )
-}
-
-function getCurrentRelativeUrl() {
-  if (typeof window === 'undefined') return '/'
-  return `${window.location.pathname}${window.location.search}${window.location.hash}`
 }

@@ -122,18 +122,7 @@ export function SoulDetailPage({ slug }: SoulDetailPageProps) {
                   by <a href={`/u/${ownerHandle}`}>@{ownerHandle}</a>
                 </div>
               ) : null}
-              <div className="skill-actions">
-                {isAuthenticated ? (
-                  <button
-                    className={`star-toggle${isStarred ? ' is-active' : ''}`}
-                    type="button"
-                    onClick={() => void toggleStar({ soulId: soul._id })}
-                    aria-label={isStarred ? 'Unstar soul' : 'Star soul'}
-                  >
-                    <span aria-hidden="true">★</span>
-                  </button>
-                ) : null}
-              </div>
+              {/* 中国部署版：隐藏收藏按钮 */}
             </div>
             <div className="skill-hero-cta">
               <div className="skill-version-pill">
@@ -202,31 +191,7 @@ export function SoulDetailPage({ slug }: SoulDetailPageProps) {
           <h2 className="section-title" style={{ fontSize: '1.2rem', margin: 0 }}>
             Comments
           </h2>
-          {isAuthenticated ? (
-            <form
-              onSubmit={(event) => {
-                event.preventDefault()
-                if (!comment.trim()) return
-                void addComment({ soulId: soul._id, body: comment.trim() }).then(() =>
-                  setComment(''),
-                )
-              }}
-              className="comment-form"
-            >
-              <textarea
-                className="comment-input"
-                rows={4}
-                value={comment}
-                onChange={(event) => setComment(event.target.value)}
-                placeholder="Leave a note…"
-              />
-              <button className="btn comment-submit" type="submit">
-                Post comment
-              </button>
-            </form>
-          ) : (
-            <p className="section-subtitle">Sign in to comment.</p>
-          )}
+          {/* 中国部署版：隐藏评论表单和登录提示 */}
           <div style={{ display: 'grid', gap: 12, marginTop: 16 }}>
             {(comments ?? []).length === 0 ? (
               <div className="stat">No comments yet.</div>
@@ -237,15 +202,7 @@ export function SoulDetailPage({ slug }: SoulDetailPageProps) {
                     <strong>@{entry.user?.handle ?? entry.user?.name ?? 'user'}</strong>
                     <div className="comment-body-text">{entry.comment.body}</div>
                   </div>
-                  {isAuthenticated && me && (me._id === entry.comment.userId || isModerator(me)) ? (
-                    <button
-                      className="btn comment-delete"
-                      type="button"
-                      onClick={() => void removeComment({ commentId: entry.comment._id })}
-                    >
-                      Delete
-                    </button>
-                  ) : null}
+                  {/* 中国部署版：隐藏评论删除按钮 */}
                 </div>
               ))
             )}

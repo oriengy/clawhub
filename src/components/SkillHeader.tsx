@@ -233,28 +233,7 @@ export function SkillHeader({
                   {staffVisibilityTag}
                 </div>
               ) : null}
-              <div className="skill-actions">
-                {isAuthenticated ? (
-                  <button
-                    className={`star-toggle${isStarred ? ' is-active' : ''}`}
-                    type="button"
-                    onClick={onToggleStar}
-                    aria-label={isStarred ? 'Unstar skill' : 'Star skill'}
-                  >
-                    <span aria-hidden="true">★</span>
-                  </button>
-                ) : null}
-                {isAuthenticated ? (
-                  <button className="btn btn-ghost" type="button" onClick={onOpenReport}>
-                    Report
-                  </button>
-                ) : null}
-                {isStaff ? (
-                  <Link className="btn" to="/management" search={{ skill: skill.slug }}>
-                    Manage
-                  </Link>
-                ) : null}
-              </div>
+              {/* 中国部署版：隐藏收藏、举报、管理按钮 */}
               <SecurityScanResults
                 sha256hash={latestVersion?.sha256hash}
                 vtAnalysis={latestVersion?.vtAnalysis}

@@ -389,15 +389,7 @@ export function SkillDetailPage({
         <SkillCommentsPanel skillId={skill._id} isAuthenticated={isAuthenticated} me={me ?? null} />
       </div>
 
-      <SkillReportDialog
-        isOpen={isAuthenticated && isReportDialogOpen}
-        isSubmitting={isSubmittingReport}
-        reportReason={reportReason}
-        reportError={reportError}
-        onReasonChange={setReportReason}
-        onCancel={closeReportDialog}
-        onSubmit={() => void submitReport()}
-      />
+      {/* 中国部署版：隐藏举报对话框 */}
     </main>
   )
 }

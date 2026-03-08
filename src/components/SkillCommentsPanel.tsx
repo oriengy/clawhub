@@ -110,30 +110,7 @@ export function SkillCommentsPanel({ skillId, isAuthenticated, me }: SkillCommen
       <h2 className="section-title" style={{ fontSize: '1.2rem', margin: 0 }}>
         Comments
       </h2>
-      {isAuthenticated ? (
-        <form
-          onSubmit={(event) => {
-            event.preventDefault()
-            void submitComment()
-          }}
-          className="comment-form"
-        >
-          <textarea
-            className="comment-input"
-            rows={4}
-            value={comment}
-            onChange={(event) => setComment(event.target.value)}
-            placeholder="Leave a note…"
-            disabled={isSubmitting}
-          />
-          {submitError ? <div className="report-dialog-error">{submitError}</div> : null}
-          <button className="btn comment-submit" type="submit" disabled={isSubmitting}>
-            {isSubmitting ? 'Posting…' : 'Post comment'}
-          </button>
-        </form>
-      ) : (
-        <p className="section-subtitle">Sign in to comment.</p>
-      )}
+      {/* 中国部署版：隐藏评论表单和登录提示，仅展示已有评论 */}
       {deleteError ? <div className="report-dialog-error">{deleteError}</div> : null}
       {reportNotice ? <div className="stat">{reportNotice}</div> : null}
       <div style={{ display: 'grid', gap: 12, marginTop: 16 }}>
@@ -145,70 +122,8 @@ export function SkillCommentsPanel({ skillId, isAuthenticated, me }: SkillCommen
               <div className="comment-body">
                 <strong>@{entry.user?.handle ?? entry.user?.name ?? 'user'}</strong>
                 <div className="comment-body-text">{entry.comment.body}</div>
-                {isAuthenticated && reportingCommentId === entry.comment._id ? (
-                  <form
-                    className="comment-report-form"
-                    onSubmit={(event) => {
-                      event.preventDefault()
-                      void submitReport(entry.comment._id)
-                    }}
-                  >
-                    <textarea
-                      className="comment-input comment-report-input"
-                      rows={3}
-                      value={reportReason}
-                      onChange={(event) => setReportReason(event.target.value)}
-                      placeholder="Why are you reporting this comment?"
-                      disabled={isSubmittingReport}
-                    />
-                    <div className="comment-report-actions">
-                      <button
-                        className="btn comment-delete"
-                        type="button"
-                        onClick={closeReportForm}
-                        disabled={isSubmittingReport}
-                      >
-                        Cancel
-                      </button>
-                      <button className="btn comment-submit" type="submit" disabled={isSubmittingReport}>
-                        {isSubmittingReport ? 'Reporting…' : 'Submit report'}
-                      </button>
-                    </div>
-                    {reportError ? <div className="report-dialog-error">{reportError}</div> : null}
-                    <div className="stat">
-                      Reports require a reason. Abuse of reporting may result in bans.
-                    </div>
-                  </form>
-                ) : null}
               </div>
-              {isAuthenticated && me ? (
-                <div className="comment-actions">
-                  {me._id === entry.comment.userId || isModerator(me) ? (
-                    <button
-                      className="btn comment-delete"
-                      type="button"
-                      onClick={() => void deleteComment(entry.comment._id)}
-                      disabled={Boolean(deletingCommentId) || isSubmitting || isSubmittingReport}
-                    >
-                      {deletingCommentId === entry.comment._id ? 'Deleting…' : 'Delete'}
-                    </button>
-                  ) : null}
-                  {me._id !== entry.comment.userId ? (
-                    <button
-                      className="btn comment-delete"
-                      type="button"
-                      onClick={() => openReportForm(entry.comment._id)}
-                      disabled={
-                        isSubmitting ||
-                        Boolean(deletingCommentId) ||
-                        (Boolean(reportingCommentId) && reportingCommentId !== entry.comment._id)
-                      }
-                    >
-                      {reportingCommentId === entry.comment._id ? 'Report open' : 'Report'}
-                    </button>
-                  ) : null}
-                </div>
-              ) : null}
+              {/* 中国部署版：隐藏评论操作按钮（删除、举报） */}
             </div>
           ))
         )}
