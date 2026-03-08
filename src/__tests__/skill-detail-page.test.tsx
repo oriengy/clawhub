@@ -93,49 +93,7 @@ describe('SkillDetailPage', () => {
     })
   })
 
-  it('opens report dialog for authenticated users', async () => {
-    useAuthStatusMock.mockReturnValue({
-      isAuthenticated: true,
-      isLoading: false,
-      me: { _id: 'users:1', role: 'user' },
-    })
-    useQueryMock.mockImplementation((_fn: unknown, args: unknown) => {
-      if (args === 'skip') return undefined
-      if (args && typeof args === 'object' && 'skillId' in args) return []
-      if (args && typeof args === 'object' && 'slug' in args) {
-        return {
-          skill: {
-            _id: 'skills:1',
-            slug: 'weather',
-            displayName: 'Weather',
-            summary: 'Get current weather.',
-            ownerUserId: 'users:1',
-            tags: {},
-            stats: { stars: 0, downloads: 0 },
-          },
-          owner: { handle: 'steipete', name: 'Peter' },
-          latestVersion: { _id: 'skillVersions:1', version: '1.0.0', parsed: {}, files: [] },
-        }
-      }
-      return undefined
-    })
-
-    render(<SkillDetailPage slug="weather" />)
-
-    expect(
-      (
-        await screen.findAllByText(
-          /free to use, modify, and redistribute\. no attribution required\./i,
-        )
-      ).length,
-    ).toBeGreaterThan(0)
-    expect(screen.queryByText(/举报需要填写原因。滥用举报可能导致封号。/)).toBeNull()
-
-    fireEvent.click(await screen.findByRole('button', { name: /举报/ }))
-
-    expect(await screen.findByRole('dialog')).toBeTruthy()
-    expect(screen.getByText(/举报技能/)).toBeTruthy()
-  })
+  // 中国部署版：举报按钮已隐藏，跳过举报对话框测试
 
   it('defers compare version query until compare tab is requested', async () => {
     useQueryMock.mockImplementation((_fn: unknown, args: unknown) => {
