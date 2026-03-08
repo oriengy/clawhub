@@ -41,7 +41,7 @@ function UserProfile() {
     return (
       <main className="section">
         <div className="card">
-          <div className="loading-indicator">Loading user…</div>
+          <div className="loading-indicator">加载用户中…</div>
         </div>
       </main>
     )
@@ -50,7 +50,7 @@ function UserProfile() {
   if (user === null) {
     return (
       <main className="section">
-        <div className="card">User not found.</div>
+        <div className="card">用户未找到。</div>
       </main>
     )
   }
@@ -77,7 +77,7 @@ function UserProfile() {
       </div>
 
       {isSelf ? (
-        <div className="profile-tabs" role="tablist" aria-label="Profile tabs">
+        <div className="profile-tabs" role="tablist" aria-label="个人资料标签">
           <button
             className={tab === 'stars' ? 'profile-tab is-active' : 'profile-tab'}
             type="button"
@@ -85,7 +85,7 @@ function UserProfile() {
             aria-selected={tab === 'stars'}
             onClick={() => setTab('stars')}
           >
-            Stars
+            收藏
           </button>
           <button
             className={tab === 'installed' ? 'profile-tab is-active' : 'profile-tab'}
@@ -94,7 +94,7 @@ function UserProfile() {
             aria-selected={tab === 'installed'}
             onClick={() => setTab('installed')}
           >
-            Installed
+            已安装
           </button>
         </div>
       ) : null}
@@ -108,13 +108,13 @@ function UserProfile() {
       ) : (
         <>
           <h2 className="section-title" style={{ fontSize: '1.3rem' }}>
-            Published
+            已发布
           </h2>
-          <p className="section-subtitle">Skills published by this user.</p>
+          <p className="section-subtitle">该用户发布的技能。</p>
 
           {isLoadingPublished ? (
             <div className="card">
-              <div className="loading-indicator">Loading published skills…</div>
+              <div className="loading-indicator">加载已发布技能中…</div>
             </div>
           ) : published.length > 0 ? (
             <div className="grid" style={{ marginBottom: 18 }}>
@@ -123,7 +123,7 @@ function UserProfile() {
                   key={skill._id}
                   skill={skill}
                   badge={getSkillBadges(skill)}
-                  summaryFallback="Agent-ready skill pack."
+                  summaryFallback="Agent 就绪的技能包。"
                   meta={
                     <div className="stat">
                       <SkillStatsTripletLine stats={skill.stats} />
@@ -135,16 +135,16 @@ function UserProfile() {
           ) : null}
 
           <h2 className="section-title" style={{ fontSize: '1.3rem' }}>
-            Stars
+            收藏
           </h2>
-          <p className="section-subtitle">Skills this user has starred.</p>
+          <p className="section-subtitle">该用户收藏的技能。</p>
 
           {isLoadingSkills ? (
             <div className="card">
-              <div className="loading-indicator">Loading stars…</div>
+              <div className="loading-indicator">加载收藏中…</div>
             </div>
           ) : skills.length === 0 ? (
-            <div className="card">No stars yet.</div>
+            <div className="card">暂无收藏。</div>
           ) : (
             <div className="grid">
               {skills.map((skill) => (
@@ -152,7 +152,7 @@ function UserProfile() {
                   key={skill._id}
                   skill={skill}
                   badge={getSkillBadges(skill)}
-                  summaryFallback="Agent-ready skill pack."
+                  summaryFallback="Agent 就绪的技能包。"
                   meta={
                     <div className="stat">
                       <SkillStatsTripletLine stats={skill.stats} />
@@ -180,10 +180,10 @@ function InstalledSection(props: {
     return (
       <>
         <h2 className="section-title" style={{ fontSize: '1.3rem' }}>
-          Installed
+          已安装
         </h2>
         <div className="card">
-          <div className="loading-indicator">Loading telemetry…</div>
+          <div className="loading-indicator">加载遥测数据…</div>
         </div>
       </>
     )
@@ -193,9 +193,9 @@ function InstalledSection(props: {
     return (
       <>
         <h2 className="section-title" style={{ fontSize: '1.3rem' }}>
-          Installed
+          已安装
         </h2>
-        <div className="card">Sign in to view your installed skills.</div>
+        <div className="card">登录以查看你已安装的技能。</div>
       </>
     )
   }
@@ -206,25 +206,24 @@ function InstalledSection(props: {
         Installed
       </h2>
       <p className="section-subtitle" style={{ maxWidth: 760 }}>
-        Private view. Only you can see your folders/roots. Everyone else only sees aggregated
-        install counts per skill.
+        私密视图。只有你能看到你的文件夹/根目录。其他人只能看到每个技能的汇总安装数。
       </p>
       <div className="profile-actions">
         <button className="btn" type="button" onClick={props.onToggleRemoved}>
-          {props.includeRemoved ? 'Hide removed' : 'Show removed'}
+          {props.includeRemoved ? '隐藏已移除' : '显示已移除'}
         </button>
         <button className="btn" type="button" onClick={() => setShowRaw((value) => !value)}>
-          {showRaw ? 'Hide JSON' : 'Show JSON'}
+          {showRaw ? '隐藏 JSON' : '显示 JSON'}
         </button>
         <button
           className="btn"
           type="button"
           onClick={() => {
-            if (!window.confirm('Delete all telemetry data?')) return
+            if (!window.confirm('确定删除所有遥测数据？')) return
             void clearTelemetry()
           }}
         >
-          Delete telemetry
+          删除遥测数据
         </button>
       </div>
 
@@ -237,7 +236,7 @@ function InstalledSection(props: {
       ) : null}
 
       {data.roots.length === 0 ? (
-        <div className="card">No telemetry yet. Run `clawhub sync` from the CLI.</div>
+        <div className="card">暂无遥测数据。请在 CLI 中运行 `clawhub sync`。</div>
       ) : (
         <div style={{ display: 'grid', gap: 16 }}>
           {data.roots.map((root) => (
@@ -246,14 +245,14 @@ function InstalledSection(props: {
                 <div>
                   <div className="telemetry-root-title">{root.label}</div>
                   <div className="telemetry-root-meta">
-                    Last sync {new Date(root.lastSeenAt).toLocaleString()}
-                    {root.expiredAt ? ' · stale' : ''}
+                    上次同步 {new Date(root.lastSeenAt).toLocaleString()}
+                    {root.expiredAt ? ' · 已过期' : ''}
                   </div>
                 </div>
-                <div className="tag">{root.skills.length} skills</div>
+                <div className="tag">{root.skills.length} 个技能</div>
               </div>
               {root.skills.length === 0 ? (
-                <div className="stat">No skills found in this root.</div>
+                <div className="stat">此根目录下未找到技能。</div>
               ) : (
                 <div className="telemetry-skill-list">
                   {root.skills.map((entry) => (
@@ -267,7 +266,7 @@ function InstalledSection(props: {
                       </a>
                       <div className="telemetry-skill-meta mono">
                         {entry.lastVersion ? `v${entry.lastVersion}` : 'v?'}{' '}
-                        {entry.removedAt ? '· removed' : ''}
+                        {entry.removedAt ? '· 已移除' : ''}
                       </div>
                     </div>
                   ))}

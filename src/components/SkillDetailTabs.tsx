@@ -47,7 +47,7 @@ export function SkillDetailTabs({
           type="button"
           onClick={() => setActiveTab('files')}
         >
-          Files
+          文件
         </button>
         <button
           className={`tab-button${activeTab === 'compare' ? ' is-active' : ''}`}
@@ -62,19 +62,19 @@ export function SkillDetailTabs({
             void import('./SkillDiffCard')
           }}
         >
-          Compare
+          对比
         </button>
         <button
           className={`tab-button${activeTab === 'versions' ? ' is-active' : ''}`}
           type="button"
           onClick={() => setActiveTab('versions')}
         >
-          Versions
+          版本
         </button>
       </div>
 
       {activeTab === 'files' ? (
-        <Suspense fallback={<div className="tab-body stat">Loading file viewer…</div>}>
+        <Suspense fallback={<div className="tab-body stat">加载文件查看器…</div>}>
           <SkillFilesPanel
             versionId={latestVersionId}
             readmeContent={readmeContent}
@@ -86,7 +86,7 @@ export function SkillDetailTabs({
 
       {activeTab === 'compare' ? (
         <div className="tab-body">
-          <Suspense fallback={<div className="stat">Loading diff viewer…</div>}>
+          <Suspense fallback={<div className="stat">加载对比查看器…</div>}>
             <SkillDiffCard skill={skill} versions={diffVersions ?? []} variant="embedded" />
           </Suspense>
         </div>

@@ -53,7 +53,7 @@ export function SkillsIndex() {
   const searchInputRef = useRef<HTMLInputElement>(null)
   const totalSkills = useQuery(api.skills.countPublicSkills)
   const totalSkillsText =
-    typeof totalSkills === 'number' ? totalSkills.toLocaleString('en-US') : null
+    typeof totalSkills === 'number' ? totalSkills.toLocaleString('zh-CN') : null
 
   const model = useSkillsBrowseModel({
     navigate,
@@ -65,13 +65,13 @@ export function SkillsIndex() {
     <main className="section">
       <header className="skills-header-top">
         <h1 className="section-title" style={{ marginBottom: 8 }}>
-          Skills
+          技能
           {totalSkillsText && <span style={{ opacity: 0.55 }}>{` (${totalSkillsText})`}</span>}
         </h1>
         <p className="section-subtitle" style={{ marginBottom: 0 }}>
           {model.isLoadingSkills
-            ? 'Loading skills…'
-            : `Browse the skill library${model.activeFilters.length ? ` (${model.activeFilters.join(', ')})` : ''}.`}
+            ? '加载技能中…'
+            : `浏览技能库${model.activeFilters.length ? `（${model.activeFilters.join('、')}）` : ''}。`}
         </p>
       </header>
       <div className="skills-container">

@@ -33,8 +33,8 @@ type SoulMeta = {
   owner: string | null
 }
 
-const DEFAULT_DESCRIPTION = 'ClawHub — a fast skill registry for agents, with vector search.'
-const DEFAULT_SOUL_DESCRIPTION = 'SoulHub — the home for SOUL.md bundles and personal system lore.'
+const DEFAULT_DESCRIPTION = 'ClawHub — 面向 Agent 的快速技能注册中心，支持向量搜索。'
+const DEFAULT_SOUL_DESCRIPTION = 'SoulHub — SOUL.md 捆绑包与个人系统知识库的家园。'
 const OG_SKILL_IMAGE_LAYOUT_VERSION = '5'
 const OG_SOUL_IMAGE_LAYOUT_VERSION = '1'
 
@@ -105,7 +105,7 @@ export function buildSkillMeta(source: SkillMetaSource): SkillMeta {
   const version = clean(source.version)
   const title = `${displayName} — ClawHub`
   const description =
-    summary || (owner ? `Agent skill by @${owner} on ClawHub.` : DEFAULT_DESCRIPTION)
+    summary || (owner ? `@${owner} 在 ClawHub 上发布的 Agent 技能。` : DEFAULT_DESCRIPTION)
   const ownerPath = owner || ownerId || 'unknown'
   const url = `${siteUrl}/${ownerPath}/${source.slug}`
   const imageParams = new URLSearchParams()
@@ -130,7 +130,7 @@ export function buildSoulMeta(source: SoulMetaSource): SoulMeta {
   const version = clean(source.version)
   const title = `${displayName} — SoulHub`
   const description =
-    summary || (owner ? `Soul by @${owner} on SoulHub.` : DEFAULT_SOUL_DESCRIPTION)
+    summary || (owner ? `@${owner} 在 SoulHub 上发布的灵魂。` : DEFAULT_SOUL_DESCRIPTION)
   const url = `${siteUrl}/souls/${source.slug}`
   const imageParams = new URLSearchParams()
   imageParams.set('v', OG_SOUL_IMAGE_LAYOUT_VERSION)

@@ -47,8 +47,8 @@ describe('SkillDetailPage', () => {
     })
 
     render(<SkillDetailPage slug="weather" />)
-    expect(screen.getByText(/Loading skill/i)).toBeTruthy()
-    expect(screen.queryByText(/Skill not found/i)).toBeNull()
+    expect(screen.getByText(/加载技能中/)).toBeTruthy()
+    expect(screen.queryByText(/技能未找到/)).toBeNull()
   })
 
   it('shows not found when skill query resolves to null', async () => {
@@ -58,7 +58,7 @@ describe('SkillDetailPage', () => {
     })
 
     render(<SkillDetailPage slug="missing-skill" />)
-    expect(await screen.findByText(/Skill not found/i)).toBeTruthy()
+    expect(await screen.findByText(/技能未找到/)).toBeTruthy()
   })
 
   it('redirects legacy routes to canonical owner/slug', async () => {
@@ -81,7 +81,7 @@ describe('SkillDetailPage', () => {
     })
 
     render(<SkillDetailPage slug="weather" redirectToCanonical />)
-    expect(screen.getByText(/Loading skill/i)).toBeTruthy()
+    expect(screen.getByText(/加载技能中/)).toBeTruthy()
 
     await waitFor(() => {
       expect(navigateMock).toHaveBeenCalled()
@@ -129,12 +129,12 @@ describe('SkillDetailPage', () => {
         )
       ).length,
     ).toBeGreaterThan(0)
-    expect(screen.queryByText(/Reports require a reason\. Abuse may result in a ban\./i)).toBeNull()
+    expect(screen.queryByText(/举报需要填写原因。滥用举报可能导致封号。/)).toBeNull()
 
-    fireEvent.click(await screen.findByRole('button', { name: /report/i }))
+    fireEvent.click(await screen.findByRole('button', { name: /举报/ }))
 
     expect(await screen.findByRole('dialog')).toBeTruthy()
-    expect(screen.getByText(/Report skill/i)).toBeTruthy()
+    expect(screen.getByText(/举报技能/)).toBeTruthy()
   })
 
   it('defers compare version query until compare tab is requested', async () => {
@@ -175,7 +175,7 @@ describe('SkillDetailPage', () => {
       ),
     ).toBe(false)
 
-    fireEvent.click(screen.getByRole('button', { name: /compare/i }))
+    fireEvent.click(screen.getByRole('button', { name: /对比/ }))
 
     await waitFor(() => {
       expect(

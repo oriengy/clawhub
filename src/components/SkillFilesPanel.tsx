@@ -83,7 +83,7 @@ export function SkillFilesPanel({
         .catch((error) => {
           if (!isMounted.current) return
           if (requestId.current !== current) return
-          setFileError(error instanceof Error ? error.message : 'Failed to load file')
+          setFileError(error instanceof Error ? error.message : '加载文件失败')
           setIsLoading(false)
         })
     },
@@ -100,9 +100,9 @@ export function SkillFilesPanel({
           {readmeContent ? (
             <ReactMarkdown remarkPlugins={[remarkGfm]}>{readmeContent}</ReactMarkdown>
           ) : readmeError ? (
-            <div className="stat">Failed to load SKILL.md: {readmeError}</div>
+            <div className="stat">加载 SKILL.md 失败：{readmeError}</div>
           ) : (
-            <div>Loading…</div>
+            <div>加载中…</div>
           )}
         </div>
       </div>
@@ -110,15 +110,15 @@ export function SkillFilesPanel({
         <div className="file-list">
           <div className="file-list-header">
             <h3 className="section-title" style={{ fontSize: '1.05rem', margin: 0 }}>
-              Files
+              文件
             </h3>
             <span className="section-subtitle" style={{ margin: 0 }}>
-              {latestFiles.length} total
+              共 {latestFiles.length} 个
             </span>
           </div>
           <div className="file-list-body">
             {latestFiles.length === 0 ? (
-              <div className="stat">No files available.</div>
+              <div className="stat">暂无文件。</div>
             ) : (
               latestFiles.map((file) => (
                 <button
@@ -139,7 +139,7 @@ export function SkillFilesPanel({
         </div>
         <div className="file-viewer">
           <div className="file-viewer-header">
-            <div className="file-path">{selectedPath ?? 'Select a file'}</div>
+            <div className="file-path">{selectedPath ?? '选择文件'}</div>
             {fileMeta ? (
               <span className="file-meta">
                 {formatBytes(fileMeta.size)} · {fileMeta.sha256.slice(0, 12)}…
@@ -148,13 +148,13 @@ export function SkillFilesPanel({
           </div>
           <div className="file-viewer-body">
             {isLoading ? (
-              <div className="stat">Loading…</div>
+              <div className="stat">加载中…</div>
             ) : fileError ? (
-              <div className="stat">Failed to load file: {fileError}</div>
+              <div className="stat">加载文件失败：{fileError}</div>
             ) : fileContent ? (
               <pre className="file-viewer-code">{fileContent}</pre>
             ) : (
-              <div className="stat">Select a file to preview.</div>
+              <div className="stat">选择文件以预览。</div>
             )}
           </div>
         </div>

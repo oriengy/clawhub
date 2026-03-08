@@ -70,7 +70,7 @@ function formatReportError(error: unknown) {
     if (cleaned && cleaned !== 'Server Error') return cleaned
   }
 
-  return 'Unable to submit report. Please try again.'
+  return '无法提交举报。请重试。'
 }
 
 export function SkillDetailPage({
@@ -139,7 +139,7 @@ export function SkillDetailPage({
   const forkOf = result?.forkOf ?? null
   const canonical = result?.canonical ?? null
   const modInfo = result?.moderationInfo ?? null
-  const forkOfLabel = forkOf?.kind === 'duplicate' ? 'duplicate of' : 'fork of'
+  const forkOfLabel = forkOf?.kind === 'duplicate' ? '重复自' : '派生自'
   const forkOfOwnerHandle = forkOf?.owner?.handle ?? null
   const forkOfOwnerId = forkOf?.owner?.userId ?? null
   const canonicalOwnerHandle = canonical?.owner?.handle ?? null
@@ -159,18 +159,18 @@ export function SkillDetailPage({
   const isRemoved = moderationStatus === 'removed'
   const isAutoHidden = isHidden && staffSkill?.moderationReason === 'auto.reports'
   const staffVisibilityTag = isRemoved
-    ? 'Removed'
+    ? '已移除'
     : isAutoHidden
-      ? 'Auto-hidden'
+      ? '自动隐藏'
       : isHidden
-        ? 'Hidden'
+        ? '已隐藏'
         : null
   const staffModerationNote = staffVisibilityTag
     ? isAutoHidden
-      ? 'Auto-hidden after 4+ unique reports.'
+      ? '因 4 条以上独立举报被自动隐藏。'
       : isRemoved
-        ? 'Removed from public view.'
-        : 'Hidden from public view.'
+        ? '已从公开视图中移除。'
+        : '已从公开视图中隐藏。'
     : null
 
   const versionById = new Map<Id<'skillVersions'>, Doc<'skillVersions'>>(
@@ -218,7 +218,7 @@ export function SkillDetailPage({
       })
       .catch((error) => {
         if (cancelled) return
-        setReadmeError(error instanceof Error ? error.message : 'Failed to load README')
+        setReadmeError(error instanceof Error ? error.message : '加载 README 失败')
         setReadme(null)
       })
 
@@ -261,7 +261,7 @@ export function SkillDetailPage({
 
     const trimmedReason = reportReason.trim()
     if (!trimmedReason) {
-      setReportError('Report reason required.')
+      setReportError('举报原因为必填项。')
       return
     }
 
@@ -271,9 +271,9 @@ export function SkillDetailPage({
       const submission = await reportSkill({ skillId: skill._id, reason: trimmedReason })
       closeReportDialog()
       if (submission.reported) {
-        window.alert('Thanks — your report has been submitted.')
+        window.alert('感谢，你的举报已提交。')
       } else {
-        window.alert('You have already reported this skill.')
+        window.alert('你已经举报过此技能。')
       }
     } catch (error) {
       console.error('Failed to report skill', error)
@@ -286,7 +286,7 @@ export function SkillDetailPage({
     return (
       <main className="section">
         <div className="card">
-          <div className="loading-indicator">Loading skill…</div>
+          <div className="loading-indicator">加载技能中…</div>
         </div>
       </main>
     )
@@ -295,7 +295,7 @@ export function SkillDetailPage({
   if (result === null || !skill) {
     return (
       <main className="section">
-        <div className="card">Skill not found.</div>
+        <div className="card">技能未找到。</div>
       </main>
     )
   }
@@ -347,7 +347,7 @@ export function SkillDetailPage({
         {nixSnippet ? (
           <div className="card">
             <h2 className="section-title" style={{ fontSize: '1.2rem', margin: 0 }}>
-              Install via Nix
+              通过 Nix 安装
             </h2>
             <p className="section-subtitle" style={{ margin: 0 }}>
               {nixSystems.length ? `Systems: ${nixSystems.join(', ')}` : 'nix-clawdbot'}
@@ -361,10 +361,10 @@ export function SkillDetailPage({
         {configExample ? (
           <div className="card">
             <h2 className="section-title" style={{ fontSize: '1.2rem', margin: 0 }}>
-              Config example
+              配置示例
             </h2>
             <p className="section-subtitle" style={{ margin: 0 }}>
-              Starter config for this plugin bundle.
+              此插件包的入门配置。
             </p>
             <pre className="hero-install-code" style={{ marginTop: 12 }}>
               {configExample}

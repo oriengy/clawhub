@@ -22,7 +22,7 @@ export function getPublicSlugCollision(params: {
   if (!normalizedSlug) return null
   if (!params.result || params.result.available) return null
   return {
-    message: params.result.message?.trim() || 'Slug is already taken. Choose a different slug.',
+    message: params.result.message?.trim() || '标识已被占用。请选择其他标识。',
     url: params.result.url ?? null,
   }
 }

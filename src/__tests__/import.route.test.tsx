@@ -104,7 +104,7 @@ describe('Import route', () => {
         return {
           available: false,
           reason: 'taken',
-          message: 'Slug is already taken. Choose a different slug.',
+          message: '标识已被占用。请选择其他标识。',
           url: '/alice/taken-skill',
         }
       }
@@ -115,15 +115,15 @@ describe('Import route', () => {
     fireEvent.change(screen.getByPlaceholderText('https://github.com/owner/repo'), {
       target: { value: 'https://github.com/octo/repo' },
     })
-    fireEvent.click(screen.getByRole('button', { name: /detect/i }))
+    fireEvent.click(screen.getByRole('button', { name: /检测/i }))
 
     await waitFor(() => {
       expect(previewImport).toHaveBeenCalled()
       expect(previewCandidate).toHaveBeenCalled()
     })
 
-    expect(await screen.findByText(/Slug is already taken\. Choose a different slug\./i)).toBeTruthy()
+    expect(await screen.findByText(/标识已被占用。请选择其他标识。/)).toBeTruthy()
     expect(screen.getByRole('link', { name: '/alice/taken-skill' })).toBeTruthy()
-    expect(screen.getByRole('button', { name: /import \+ publish/i }).getAttribute('disabled')).not.toBeNull()
+    expect(screen.getByRole('button', { name: /导入并发布/i }).getAttribute('disabled')).not.toBeNull()
   })
 })

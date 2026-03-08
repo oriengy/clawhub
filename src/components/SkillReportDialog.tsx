@@ -23,10 +23,10 @@ export function SkillReportDialog({
     <div className="report-dialog-backdrop">
       <div className="report-dialog" role="dialog" aria-modal="true" aria-labelledby="report-title">
         <h2 id="report-title" className="section-title" style={{ margin: 0, fontSize: '1.1rem' }}>
-          Report skill
+          举报技能
         </h2>
         <p className="section-subtitle" style={{ margin: 0 }}>
-          Describe the issue so moderators can review it quickly.
+          请描述问题，以便管理员快速审核。
         </p>
         <form
           className="report-dialog-form"
@@ -37,8 +37,8 @@ export function SkillReportDialog({
         >
           <textarea
             className="report-dialog-textarea"
-            aria-label="Report reason"
-            placeholder="What should moderators know?"
+            aria-label="举报原因"
+            placeholder="管理员需要了解什么？"
             value={reportReason}
             onChange={(event) => onReasonChange(event.target.value)}
             rows={5}
@@ -54,10 +54,10 @@ export function SkillReportDialog({
               }}
               disabled={isSubmitting}
             >
-              Cancel
+              取消
             </button>
             <button type="submit" className="btn" disabled={isSubmitting}>
-              {isSubmitting ? 'Submitting…' : 'Submit report'}
+              {isSubmitting ? '提交中…' : '提交举报'}
             </button>
           </div>
         </form>

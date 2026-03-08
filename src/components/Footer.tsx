@@ -8,27 +8,26 @@ export function Footer() {
         <div className="site-footer-divider" aria-hidden="true" />
         <div className="site-footer-row">
           <div className="site-footer-copy">
-            {siteName} · An{' '}
+            {siteName} · 一个{' '}
             <a href="https://openclaw.ai" target="_blank" rel="noreferrer">
               OpenClaw
             </a>{' '}
-            project · Deployed on{' '}
+            项目 · 部署于{' '}
             <a href="https://vercel.com" target="_blank" rel="noreferrer">
               Vercel
             </a>{' '}
-            · Powered by{' '}
+            · 由{' '}
             <a href="https://www.convex.dev" target="_blank" rel="noreferrer">
               Convex
             </a>{' '}
-            ·{' '}
+            驱动 ·{' '}
             <a href="https://github.com/openclaw/clawhub" target="_blank" rel="noreferrer">
-              Open source (MIT)
+              开源 (MIT)
             </a>{' '}
             ·{' '}
             <a href="https://steipete.me" target="_blank" rel="noreferrer">
               Peter Steinberger
             </a>
-            .
           </div>
         </div>
       </div>

@@ -29,8 +29,8 @@ export function InstallSwitcher({ exampleSlug = 'sonoscli' }: InstallSwitcherPro
   return (
     <div className="install-switcher">
       <div className="install-switcher-row">
-        <div className="stat">Install any skill folder in one shot:</div>
-        <div className="install-switcher-toggle" role="tablist" aria-label="Install command">
+        <div className="stat">一行命令安装任意技能文件夹：</div>
+        <div className="install-switcher-toggle" role="tablist" aria-label="安装命令">
           {PACKAGE_MANAGERS.map((entry) => (
             <button
               key={entry.id}

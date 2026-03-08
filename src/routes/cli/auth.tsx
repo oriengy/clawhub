@@ -21,7 +21,7 @@ function CliAuth() {
     label_b64?: string
     state?: string
   }
-  const [status, setStatus] = useState<string>('Preparing…')
+  const [status, setStatus] = useState<string>('准备中…')
   const [token, setToken] = useState<string | null>(null)
   const hasRun = useRef(false)
 
@@ -46,10 +46,10 @@ function CliAuth() {
     hasRun.current = true
 
     const run = async () => {
-      setStatus('Creating token…')
+      setStatus('创建令牌中…')
       const result = await createToken({ label })
       setToken(result.token)
-      setStatus('Redirecting to CLI…')
+      setStatus('跳转到 CLI 中…')
       const hash = new URLSearchParams()
       hash.set('token', result.token)
       hash.set('registry', registry)
@@ -58,7 +58,7 @@ function CliAuth() {
     }
 
     void run().catch((error) => {
-      const message = error instanceof Error ? error.message : 'Failed to create token'
+      const message = error instanceof Error ? error.message : '创建令牌失败'
       setStatus(message)
       setToken(null)
     })
@@ -69,11 +69,11 @@ function CliAuth() {
       <main className="section">
         <div className="card">
           <h1 className="section-title" style={{ marginTop: 0 }}>
-            CLI login
+            CLI 登录
           </h1>
-          <p className="section-subtitle">Invalid redirect URL.</p>
+          <p className="section-subtitle">无效的重定向 URL。</p>
           <p className="section-subtitle" style={{ marginBottom: 0 }}>
-            Run the CLI again to start a fresh login.
+            请重新运行 CLI 以开始新的登录。
           </p>
         </div>
       </main>
@@ -85,11 +85,11 @@ function CliAuth() {
       <main className="section">
         <div className="card">
           <h1 className="section-title" style={{ marginTop: 0 }}>
-            CLI login
+            CLI 登录
           </h1>
-          <p className="section-subtitle">Missing state.</p>
+          <p className="section-subtitle">缺少 state 参数。</p>
           <p className="section-subtitle" style={{ marginBottom: 0 }}>
-            Run the CLI again to start a fresh login.
+            请重新运行 CLI 以开始新的登录。
           </p>
         </div>
       </main>
@@ -101,9 +101,9 @@ function CliAuth() {
       <main className="section">
         <div className="card">
           <h1 className="section-title" style={{ marginTop: 0 }}>
-            CLI login
+            CLI 登录
           </h1>
-          <p className="section-subtitle">Sign in to create an API token for the CLI.</p>
+          <p className="section-subtitle">登录以为 CLI 创建 API Token。</p>
           <button
             className="btn btn-primary"
             type="button"
@@ -112,7 +112,7 @@ function CliAuth() {
               void signIn('github', signInRedirectTo ? { redirectTo: signInRedirectTo } : undefined)
             }
           >
-            Sign in with GitHub
+            使用 GitHub 登录
           </button>
         </div>
       </main>
@@ -128,7 +128,7 @@ function CliAuth() {
         <p className="section-subtitle">{status}</p>
         {token ? (
           <div className="stat" style={{ overflowX: 'auto' }}>
-            <div style={{ marginBottom: 8 }}>If redirect fails, copy this token:</div>
+            <div style={{ marginBottom: 8 }}>如果跳转失败，请复制此令牌：</div>
             <code>{token}</code>
           </div>
         ) : null}

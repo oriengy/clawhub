@@ -209,7 +209,7 @@ export function SkillDiffCard({ skill, versions, variant = 'card' }: SkillDiffCa
         setRightText(nextRight ?? EMPTY_DIFF_TEXT)
       } catch (err) {
         if (cancelled) return
-        setError(err instanceof Error ? err.message : 'Failed to load diff')
+        setError(err instanceof Error ? err.message : '加载对比失败')
       } finally {
         if (!cancelled) setIsLoading(false)
       }
@@ -248,10 +248,10 @@ export function SkillDiffCard({ skill, versions, variant = 'card' }: SkillDiffCa
       <div className="diff-header">
         <div>
           <h2 className="section-title" style={{ fontSize: '1.2rem', margin: 0 }}>
-            Compare versions
+            版本对比
           </h2>
           <p className="section-subtitle" style={{ margin: 0 }}>
-            Inline or side-by-side diff for any file.
+            支持内联或并排对比任意文件。
           </p>
         </div>
         <fieldset className="diff-toggle-group">
@@ -261,21 +261,21 @@ export function SkillDiffCard({ skill, versions, variant = 'card' }: SkillDiffCa
             type="button"
             onClick={() => setViewMode('split')}
           >
-            Side-by-side
+            并排
           </button>
           <button
             className={`diff-toggle${viewMode === 'inline' ? ' is-active' : ''}`}
             type="button"
             onClick={() => setViewMode('inline')}
           >
-            Inline
+            内联
           </button>
         </fieldset>
       </div>
 
       <div className="diff-controls">
         <div className="diff-select">
-          <label htmlFor="diff-left">Left</label>
+          <label htmlFor="diff-left">左侧</label>
           <select
             id="diff-left"
             className="search-input"
@@ -283,7 +283,7 @@ export function SkillDiffCard({ skill, versions, variant = 'card' }: SkillDiffCa
             onChange={(event) => setLeftVersionId(event.target.value as Id<'skillVersions'>)}
           >
             <option value="" disabled>
-              Select version
+              选择版本
             </option>
             {renderOptions(versionOptions)}
           </select>
@@ -297,10 +297,10 @@ export function SkillDiffCard({ skill, versions, variant = 'card' }: SkillDiffCa
           }}
           disabled={!leftVersionId || !rightVersionId}
         >
-          Swap
+          交换
         </button>
         <div className="diff-select">
-          <label htmlFor="diff-right">Right</label>
+          <label htmlFor="diff-right">右侧</label>
           <select
             id="diff-right"
             className="search-input"
@@ -308,7 +308,7 @@ export function SkillDiffCard({ skill, versions, variant = 'card' }: SkillDiffCa
             onChange={(event) => setRightVersionId(event.target.value as Id<'skillVersions'>)}
           >
             <option value="" disabled>
-              Select version
+              选择版本
             </option>
             {renderOptions(versionOptions)}
           </select>
@@ -317,15 +317,15 @@ export function SkillDiffCard({ skill, versions, variant = 'card' }: SkillDiffCa
 
       <div className="diff-meta">
         <span>
-          Left {leftLabel} • Right {rightLabel}
+          左侧 {leftLabel} • 右侧 {rightLabel}
         </span>
-        {diffUnavailable ? <span>Need at least 2 versions.</span> : null}
+        {diffUnavailable ? <span>至少需要 2 个版本。</span> : null}
       </div>
 
       <div className="diff-layout">
         <div className="diff-files">
           {fileDiffItems.length === 0 ? (
-            <div className="diff-empty">No files to compare.</div>
+            <div className="diff-empty">暂无文件可对比。</div>
           ) : (
             fileDiffItems.map((item) => (
               <button
@@ -345,32 +345,39 @@ export function SkillDiffCard({ skill, versions, variant = 'card' }: SkillDiffCa
             <div className="diff-empty">{error}</div>
           ) : sizeWarning ? (
             <div className="diff-empty">
-              {sizeWarning.side === 'left' ? 'Left' : 'Right'} file exceeds 200KB:{' '}
+              {sizeWarning.side === 'left' ? '左侧' : '右侧'}文件超过 200KB：{' '}
               {sizeWarning.path}
             </div>
           ) : diffUnavailable ? (
-            <div className="diff-empty">Publish another version to compare.</div>
+            <div className="diff-empty">发布新版本后即可对比。</div>
           ) : !selectionReady ? (
-            <div className="diff-empty">Select two versions to compare.</div>
+            <div className="diff-empty">选择两个版本进行对比。</div>
           ) : !fileSelected ? (
-            <div className="diff-empty">Select a file to compare.</div>
+            <div className="diff-empty">选择文件进行对比。</div>
           ) : (
-            <ClientOnly fallback={<div className="diff-empty">Preparing diff…</div>}>
+            <ClientOnly fallback={<div className="diff-empty">准备对比…</div>}>
               <DiffEditor
                 className="diff-monaco"
                 original={leftText}
                 modified={rightText}
                 theme={getMonacoThemeName()}
-                loading={<div className="diff-empty">Loading diff…</div>}
+                loading={<div className="diff-empty">加载对比…</div>}
                 options={buildDiffOptions(viewMode)}
               />
-              {isLoading ? <div className="diff-loading">Loading…</div> : null}
+              {isLoading ? <div className="diff-loading">加载中…</div> : null}
             </ClientOnly>
           )}
         </div>
       </div>
     </div>
   )
+}
+
+// optgroup 分组名映射
+const groupLabels: Record<VersionOption['group'], string> = {
+  Special: '特殊',
+  Tags: '标签',
+  Versions: '版本',
 }
 
 function renderOptions(options: VersionOption[]) {
@@ -385,7 +392,7 @@ function renderOptions(options: VersionOption[]) {
   return (['Special', 'Tags', 'Versions'] as const)
     .filter((group) => groups[group].length > 0)
     .map((group) => (
-      <optgroup key={group} label={group}>
+      <optgroup key={group} label={groupLabels[group]}>
         {groups[group].map((option) => (
           <option key={`${group}-${option.value}`} value={option.value} disabled={option.disabled}>
             {option.label}

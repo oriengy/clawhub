@@ -89,8 +89,8 @@ export function getSiteName(mode: SiteMode = getSiteMode()) {
 
 export function getSiteDescription(mode: SiteMode = getSiteMode()) {
   return mode === 'souls'
-    ? 'SoulHub — the home for SOUL.md bundles and personal system lore.'
-    : 'ClawHub — a fast skill registry for agents, with vector search.'
+    ? 'SoulHub — SOUL.md 包和个人系统传说的集散地。'
+    : 'ClawHub — 快速的 Agent 技能注册中心，支持向量搜索。'
 }
 
 export function getSiteUrlForMode(mode: SiteMode = getSiteMode()) {

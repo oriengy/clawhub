@@ -87,19 +87,19 @@ function getScanStatusInfo(status: string) {
   switch (status.toLowerCase()) {
     case 'benign':
     case 'clean':
-      return { label: 'Benign', className: 'scan-status-clean' }
+      return { label: '安全', className: 'scan-status-clean' }
     case 'malicious':
-      return { label: 'Malicious', className: 'scan-status-malicious' }
+      return { label: '恶意', className: 'scan-status-malicious' }
     case 'suspicious':
-      return { label: 'Suspicious', className: 'scan-status-suspicious' }
+      return { label: '可疑', className: 'scan-status-suspicious' }
     case 'loading':
-      return { label: 'Loading...', className: 'scan-status-pending' }
+      return { label: '加载中...', className: 'scan-status-pending' }
     case 'pending':
     case 'not_found':
-      return { label: 'Pending', className: 'scan-status-pending' }
+      return { label: '待扫描', className: 'scan-status-pending' }
     case 'error':
     case 'failed':
-      return { label: 'Error', className: 'scan-status-error' }
+      return { label: '错误', className: 'scan-status-error' }
     default:
       return { label: status, className: 'scan-status-unknown' }
   }
@@ -139,7 +139,7 @@ function LlmAnalysisDetail({ analysis }: { analysis: LlmAnalysis }) {
       >
         <span className="analysis-summary-text">{analysis.summary}</span>
         <span className="analysis-detail-toggle">
-          Details <span className="chevron">{'\u25BE'}</span>
+          详情 <span className="chevron">{'\u25BE'}</span>
         </span>
       </button>
       <div className="analysis-body">
@@ -161,7 +161,7 @@ function LlmAnalysisDetail({ analysis }: { analysis: LlmAnalysis }) {
         ) : null}
         {analysis.findings ? (
           <div className="scan-findings-section">
-            <div className="scan-findings-title">Scan Findings in Context</div>
+            <div className="scan-findings-title">扫描发现</div>
             {(() => {
               const counts = new Map<string, number>()
               return analysis.findings.split('\n').map((line) => {
@@ -180,10 +180,10 @@ function LlmAnalysisDetail({ analysis }: { analysis: LlmAnalysis }) {
           <div className={`analysis-guidance ${guidanceClass}`}>
             <div className="analysis-guidance-label">
               {verdict === 'malicious'
-                ? 'Do not install this skill'
+                ? '请勿安装此技能'
                 : verdict === 'suspicious'
-                  ? 'What to consider before installing'
-                  : 'Assessment'}
+                  ? '安装前请注意'
+                  : '评估结论'}
             </div>
             {analysis.guidance}
           </div>
@@ -242,7 +242,7 @@ export function SecurityScanResults({
 
   return (
     <div className="scan-results-panel">
-      <div className="scan-results-title">Security Scan</div>
+      <div className="scan-results-title">安全扫描</div>
       <div className="scan-results-list">
         {sha256hash ? (
           <div className="scan-result-row">
@@ -258,14 +258,14 @@ export function SecurityScanResults({
                 rel="noopener noreferrer"
                 className="scan-result-link"
               >
-                View report →
+                查看报告 →
               </a>
             ) : null}
           </div>
         ) : null}
         {isCodeInsight && aiAnalysis && (vtStatus === 'malicious' || vtStatus === 'suspicious') ? (
           <div className={`code-insight-analysis ${vtStatus}`}>
-            <div className="code-insight-label">Code Insight</div>
+            <div className="code-insight-label">代码分析</div>
             <p className="code-insight-text">{aiAnalysis}</p>
           </div>
         ) : null}
@@ -277,7 +277,7 @@ export function SecurityScanResults({
             </div>
             <div className={`scan-result-status ${llmStatusInfo.className}`}>{llmStatusInfo.label}</div>
             {llmAnalysis.confidence ? (
-              <span className="scan-result-confidence">{llmAnalysis.confidence} confidence</span>
+              <span className="scan-result-confidence">{llmAnalysis.confidence} 置信度</span>
             ) : null}
           </div>
         ) : null}
